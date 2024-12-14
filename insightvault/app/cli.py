@@ -2,6 +2,8 @@ import click
 import asyncio
 from typing import Optional
 from ..services.database import DatabaseService
+from ..models.document import Document
+import uuid
 import uvicorn
 import sys
 import asyncio
@@ -42,7 +44,7 @@ class InsightVaultCLI:
                 parts = command.split(maxsplit=1)
                 if not parts:
                     continue
-                    
+                
                 cmd = parts[0]
                 args = parts[1] if len(parts) > 1 else ""
                 
@@ -53,6 +55,8 @@ class InsightVaultCLI:
                     results = await self.db.query(args)
                     print(f"\nResults for: {args}")
                     # TODO: Format and display results
+                    results_str = [doc.content for doc in results]
+                    print(results_str)
                     
                 elif cmd == "add":
                     if not args:
@@ -60,6 +64,12 @@ class InsightVaultCLI:
                         continue
                     # TODO: Implement document addition
                     print(f"Adding document: {args}")
+                    new_document = Document(
+                        id=str(uuid.uuid4()),
+                        content=args,
+                        metadata={"title": "Test Document"}
+                    )
+                    await self.db.add_document(new_document)
                     
                 else:
                     print(f"Unknown command: {cmd}")
@@ -74,6 +84,7 @@ def cli() -> None:
     """InsightVault - Local RAG Pipeline Runner"""
     pass
 
+# TODO: Add command line args
 @cli.command()
 def start() -> None:
     """Start InsightVault in interactive mode"""
