@@ -2,6 +2,8 @@ import asyncio
 from .base import BaseApp
 from ..services.database import DatabaseService
 from ..models.document import Document
+from ..services import ensure_list
+from typing import Union, List
 
 class RAGApp(BaseApp):
     """RAG application
@@ -15,35 +17,39 @@ class RAGApp(BaseApp):
         super().__init__(name)
         self.db = DatabaseService()
 
-    def query(self, query: str) -> list[Document]:
+    @ensure_list(arg_name='query')
+    def query(self, query: Union[str, List[str]]) -> list[Document]:
         """Query the database for documents similar to the query"""
         self.logger.info(f"Querying the database for: {query}")
         return asyncio.get_event_loop().run_until_complete(self.async_query(query))
     
-    async def async_query(self, query: str) -> list[Document]:
+    async def async_query(self, query: Union[str, List[str]]) -> list[Document]:
         """Async version of query"""
         self.logger.info(f"Async querying the database for: {query}")
         return await self.db.query(query)
     
-    def add_document(self, document: Document) -> None:
-        """Add a document to the database"""
-        self.logger.info(f"Adding document: {document.id}")
+    @ensure_list(arg_name='document')
+    def add_documents(self, document: Union[Document, List[Document]]) -> None:
+        """Add one or more documents to the database"""
+        self.logger.info(f"Adding document(s)")
         return asyncio.get_event_loop().run_until_complete(self.async_add_document(document))
     
-    async def async_add_document(self, document: Document) -> None:
+    @ensure_list(arg_name='document')
+    async def async_add_documents(self, document: Union[Document, List[Document]]) -> None:
         """Async version of add_document"""
-        self.logger.info(f"Async adding document: {document.id}")
+        self.logger.info(f"Async adding document(s)")
         return await self.db.add_document(document)
     
-    def delete_document(self, document_id: str) -> None:
+    @ensure_list(arg_name='document_id')
+    def delete_documents(self, document_ids: Union[str, List[str]]) -> None:
         """Delete a document from the database"""
-        self.logger.info(f"Deleting document: {document_id}")
-        return asyncio.get_event_loop().run_until_complete(self.async_delete_document(document_id))
+        self.logger.info(f"Deleting document(s)")
+        return asyncio.get_event_loop().run_until_complete(self.async_delete_documents(document_ids))
     
-    async def async_delete_document(self, document_id: str) -> None:
-        """Async version of delete_document"""
-        self.logger.info(f"Async deleting document: {document_id}")
-        return await self.db.delete_document(document_id)
+    async def async_delete_documents(self, document_ids: Union[str, List[str]]) -> None:
+        """Async version of delete_documents"""
+        self.logger.info(f"Async deleting document(s)")
+        return await self.db.delete_documents(document_ids)
     
     def delete_all_documents(self) -> None:
         """Delete all documents from the database"""
