@@ -5,12 +5,18 @@ import chromadb
 from chromadb.config import Settings
 from chromadb.utils import embedding_functions
 
+# TODO: Make Chroma DB async
 class DatabaseService:
+    """Database service
+
+    This service is used to interact with the database.
+    """
     def __init__(self, persist_directory: str = "data/.db"):
         self.persist_directory = persist_directory
         self.client = None
         self.default_embedding_function = embedding_functions.DefaultEmbeddingFunction() # Gets `all-MiniLM-L6-v2`
-        
+    
+    # TODO: This is not async right?
     async def init(self) -> None:
         """Initialize the database"""
         self.client = chromadb.PersistentClient(
@@ -20,7 +26,7 @@ class DatabaseService:
                 allow_reset=True
             )
         )
-        
+      
     async def add_document(self, document: Document, collection: str = DEFAULT_COLLECTION_NAME) -> None:
         """Add a document to the database"""
         if not self.client:

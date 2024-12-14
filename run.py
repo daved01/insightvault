@@ -8,4 +8,4 @@ sys.path.insert(0, src_path)
 from insightvault.app.cli import main
 
 if __name__ == "__main__":
-    main() 
+    main()

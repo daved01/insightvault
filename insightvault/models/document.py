@@ -4,6 +4,7 @@ from typing import Optional, Dict, Any
 
 class Document(BaseModel):
     id: str
+    title: str
     content: str
     metadata: Dict[str, Any] = Field(default_factory=dict)
     embedding: Optional[list[float]] = None # TODO: Remove this?
