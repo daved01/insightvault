@@ -5,11 +5,12 @@ from typing import Optional
 from .rag import RAGApp
 from .summarizer import SummarizerApp
 from ..models.document import Document
-
+from insightvault import __version__
 
 @click.group()
+@click.version_option(__version__)
 def cli() -> None:
-    """InsightVault - Local RAG Pipeline Runner"""
+    """InsightVault - Local RAG Pipeline Runner."""
     pass
 
 
