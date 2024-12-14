@@ -2,7 +2,7 @@
 name = "insightvault"
 version = "0.1.0"
 description = "Local RAG pipeline runner"
-authors = [{ name = "David" }]
+authors = [{ name = "David Kirchhoff" }]
 dependencies = [
     "chromadb>=0.4.22",
     "llama-cpp-python>=0.2.39",
@@ -31,13 +31,13 @@ build-backend = "hatchling.build"
 
 [tool.ruff]
 line-length = 88
-target-version = "py39"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "B", "I", "N", "UP", "PL", "RUF"]
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.12"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
