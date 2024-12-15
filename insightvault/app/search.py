@@ -67,19 +67,6 @@ class SearchApp(BaseApp):
         # Add processed documents to db
         return await self.db.add_documents(processed_documents)
 
-    def delete_documents(self, document_ids: str | list[str]) -> None:
-        """Delete a document from the database"""
-        self.logger.debug("Deleting document(s)")
-        return asyncio.get_event_loop().run_until_complete(
-            self.async_delete_documents(document_ids)
-        )
-
-    async def async_delete_documents(self, document_ids: str | list[str]) -> None:
-        """Async version of delete_documents"""
-        self.logger.debug("Async deleting document(s)")
-        # TODO: Implement async delete_documents
-        return await self.db.delete_documents(document_ids)
-
     def delete_all_documents(self) -> None:
         """Delete all documents from the database"""
         self.logger.debug("Deleting all documents ...")
