@@ -163,9 +163,12 @@ cython_debug/
 
 # Data
 data/
+dev/
 
 # macOS
 .DS_Store
 
 # Pyenv
 .python-version
+
+.vscode/

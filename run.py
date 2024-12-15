@@ -5,7 +5,7 @@ from pathlib import Path
 src_path = str(Path(__file__).parent / "src")
 sys.path.insert(0, src_path)
 
-from insightvault.app.cli import main
+from insightvault.app.cli import main  # noqa: E402
 
 if __name__ == "__main__":
     main()

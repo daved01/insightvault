@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "CLI: add-text",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "run.py",
+            "console": "integratedTerminal",
+            "args": [
+                "query",
+                "add-text",
+                "This is a test text to add to the database."
+            ]
+        },
+    ]
+}
