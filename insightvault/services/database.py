@@ -1,24 +1,57 @@
+from abc import ABC, abstractmethod
+
 import chromadb
 from chromadb.config import Settings
 
-from ..constants import DEFAULT_COLLECTION_NAME
+from ..constants import COSINE_SIMILARITY_METADATA, DEFAULT_COLLECTION_NAME
 from ..models.document import Document
 from ..utils.logging import get_logger
 
 
-class DatabaseService:
-    """Database service
+class AbstractDatabaseService(ABC):
+    """Abstract database service"""
 
-    This service is used to interact with the database.
+    @abstractmethod
+    async def init(self) -> None:
+        """Initialize the database"""
+        pass
+
+    @abstractmethod
+    async def add_documents(self, documents: list[Document]) -> None:
+        """Add a list of documents to the database"""
+        pass
+
+    @abstractmethod
+    async def query(self, query_embedding: list[float]) -> list[Document]:
+        """Query the database for documents similar to the query embedding"""
+        pass
+
+    @abstractmethod
+    async def get_documents(self) -> list[Document]:
+        """Get all documents from the database"""
+        pass
+
+    @abstractmethod
+    async def delete_all_documents(self) -> None:
+        """Delete all documents from the database"""
+        pass
+
+
+class ChromaDatabaseService(AbstractDatabaseService):
+    """Chroma database service
+
+    This service is used to interact with the Chroma database.
+
+    Embedding functions are not provided here, so the caller must provide them.
     """
 
     def __init__(
         self,
         persist_directory: str = "data/.db",
     ):
+        self.logger = get_logger("insightvault.services.database")
         self.persist_directory = persist_directory
         self.client = None
-        self.logger = get_logger("insightvault.services.database")
 
     async def init(self) -> None:
         """Initialize the database"""
@@ -33,13 +66,13 @@ class DatabaseService:
     async def add_documents(
         self, documents: list[Document], collection: str = DEFAULT_COLLECTION_NAME
     ) -> None:
-        """Add a list of documents to the database"""
+        """Add a list of documents to the database. The documents must have embeddings."""
         if not self.client:
             await self.init()
 
         # Get or create collection
         collection = self.client.get_or_create_collection(
-            name=collection, metadata={"hnsw:space": "cosine"}
+            name=collection, metadata=COSINE_SIMILARITY_METADATA
         )
 
         # Add the documents
@@ -53,19 +86,27 @@ class DatabaseService:
         self.logger.debug(f"Added {len(documents)} documents to the database")
 
     async def query(
-        self, query: str, collection: str = DEFAULT_COLLECTION_NAME, k: int = 5
-    ) -> list[Document]:
-        """Query the database"""
+        self,
+        query_embedding: list[float],
+        collection: str = DEFAULT_COLLECTION_NAME,
+        k: int = 10,
+    ) -> list[Document] | None:
+        """Query the database for documents similar to the query embedding"""
         if not self.client:
             await self.init()
 
         # Get collection
-        collection = self.client.get_collection(
-            name=collection, embedding_function=self.default_embedding_function
-        )
+        try:
+            collection = self.client.get_collection(name=collection)
+        except Exception as e:
+            self.logger.error(f"Error getting collection: {e}")
+            return []
 
         # Query the collection
-        results = collection.query(query_texts=[query], n_results=k)
+        results = collection.query(
+            query_embeddings=[query_embedding],
+            n_results=k,
+        )
 
         # Convert results to Document objects
         documents = []
@@ -74,7 +115,12 @@ class DatabaseService:
                 metadata = results["metadatas"][0][i]
                 doc_id = results["ids"][0][i]
                 documents.append(
-                    Document(id=doc_id, content=content, metadata=metadata)
+                    Document(
+                        id=doc_id,
+                        title=metadata.get("title", "Unknown"),
+                        content=content,
+                        metadata=metadata,
+                    )
                 )
 
         self.logger.debug(f"Found {len(documents)} documents in the database")

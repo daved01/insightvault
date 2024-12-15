@@ -24,5 +24,16 @@
                 "list"
             ]
         },
+        {
+            "name": "CLI: search query",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "run.py",
+            "console": "integratedTerminal",
+            "args": [
+                "search",
+                "query"
+            ]
+        },
     ]
 }

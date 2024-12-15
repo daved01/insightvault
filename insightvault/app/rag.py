@@ -1,3 +1,5 @@
+import asyncio
+
 from ..models.document import Document
 from .search import SearchApp
 
@@ -19,7 +21,7 @@ class RAGApp(SearchApp):
         This RAG-specific implementation returns Document objects instead of strings.
         """
         self.logger.debug(f"RAG querying the database for: {query}")
-        return super().get_event_loop().run_until_complete(self.async_query(query))
+        return asyncio.get_event_loop().run_until_complete(self.async_query(query))
 
     # TODO: Implement this RAG-specific query functionality
     async def async_query(self, query: str) -> list[Document]:
@@ -28,6 +30,7 @@ class RAGApp(SearchApp):
         This RAG-specific implementation returns Document objects instead of strings.
         """
         self.logger.debug(f"RAG async querying the database for: {query}")
-        response: list[Document] = await self.db.query(query)
+        query_embeddings: list[list[float]] = self.embedder.embed([query])
+        response: list[Document] = await self.db.query(query_embeddings[0])
         # TODO: Implement chat response
         return "This response is static, you have work to do."

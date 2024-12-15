@@ -89,7 +89,7 @@ def search_add_text(text: str) -> None:
     _add_text_to_app(text, "insightvault.search", SearchApp)
 
 
-@search.command(name="search")
+@search.command(name="query")
 @click.argument("query_text")
 def search_search_documents(query_text: str) -> None:
     """Search documents in the database"""
@@ -137,7 +137,7 @@ def chat_add_text(text: str) -> None:
     _add_text_to_app(text, "insightvault.rag", RAGApp)
 
 
-@chat.command(name="search")
+@chat.command(name="query")
 @click.argument("query_text")
 def chat_search_documents(query_text: str) -> None:
     """Search documents in the database and return a chat response"""

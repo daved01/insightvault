@@ -1,7 +1,7 @@
 import asyncio
 
 from ..models.document import Document
-from ..services.database import DatabaseService
+from ..services.database import ChromaDatabaseService
 from ..services.embedding import EmbeddingService
 from ..services.splitter import SplitterService
 from .base import BaseApp
@@ -18,7 +18,7 @@ class SearchApp(BaseApp):
 
     def __init__(self, name: str = "insightvault.app.search") -> None:
         super().__init__(name)
-        self.db = DatabaseService()
+        self.db = ChromaDatabaseService()
         self.splitter = SplitterService()
         self.embedder = EmbeddingService()
 
@@ -30,10 +30,13 @@ class SearchApp(BaseApp):
         self.logger.debug(f"Querying the database for: {query}")
         return asyncio.get_event_loop().run_until_complete(self.async_query(query))
 
+    # TODO: This does not work well because of the database currently.
     async def async_query(self, query: str) -> list[str]:
         """Async version of query"""
         self.logger.debug(f"Async querying the database for: {query}")
-        response: list[Document] = await self.db.query(query)
+
+        query_embeddings: list[list[float]] = self.embedder.embed([query])
+        response: list[Document] = await self.db.query(query_embeddings[0])
         return sorted(set(doc.title for doc in response))
 
     def add_documents(self, documents: list[Document]) -> None:
@@ -52,11 +55,14 @@ class SearchApp(BaseApp):
             # Split document into chunks
             chunks: list[Document] = self.splitter.split(doc)
 
-            # Get embeddings for chunks
-            embedded_chunks: list[Document] = self.embedder.embed(chunks)
+            # Get embeddings for the chunk contents
+            chunk_contents = [chunk.content for chunk in chunks]
+            embeddings = self.embedder.embed(chunk_contents)
 
-            # Create new documents with chunks and embeddings
-            processed_documents.extend(embedded_chunks)
+            # Add embeddings to chunks
+            for chunk, embedding in zip(chunks, embeddings, strict=True):
+                chunk.embedding = embedding
+                processed_documents.append(chunk)
 
         # Add processed documents to db
         return await self.db.add_documents(processed_documents)
