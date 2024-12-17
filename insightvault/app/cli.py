@@ -6,6 +6,7 @@ import click
 from insightvault import __version__
 
 from ..models.document import Document
+from .base import BaseApp
 from .rag import RAGApp
 from .search import SearchApp
 from .summarizer import SummarizerApp
@@ -18,9 +19,17 @@ def cli() -> None:
     pass
 
 
-def _add_document_to_app(filepath: str, app_name: str, app_class: type) -> None:
-    """Helper function to add a document to an app"""
-    app = app_class(name=app_name)
+@cli.group()
+def manage() -> None:
+    """Manage documents in the databases"""
+    pass
+
+
+@manage.command(name="add-file")
+@click.argument("filepath", type=click.Path(exists=True))
+def manage_add_file(filepath: str) -> None:
+    """Add a document from a file to the specified database"""
+    app = BaseApp(name="insightvault.base")
 
     # Read file content
     path = Path(filepath)
@@ -37,9 +46,11 @@ def _add_document_to_app(filepath: str, app_name: str, app_class: type) -> None:
     app.add_documents([doc])
 
 
-def _add_text_to_app(text: str, app_name: str, app_class: type) -> None:
-    """Helper function to add text to an app"""
-    app = app_class(name=app_name)
+@manage.command(name="add-text")
+@click.argument("text")
+def manage_add_text(text: str) -> None:
+    """Add text to the specified database"""
+    app = BaseApp(name="insightvault.base")
     doc = Document(
         title="Direct Input",
         content=text,
@@ -48,9 +59,10 @@ def _add_text_to_app(text: str, app_name: str, app_class: type) -> None:
     app.add_documents([doc])
 
 
-def _list_documents_with_app(app_name: str, app_class: type) -> None:
-    """Helper function to list document titles using an app"""
-    app = app_class(name=app_name)
+@manage.command(name="list")
+def manage_list_documents() -> None:
+    """List all documents in the specified database"""
+    app = BaseApp(name="insightvault.base")
     documents: list[Document] = app.list_documents()
 
     if not documents:
@@ -62,9 +74,10 @@ def _list_documents_with_app(app_name: str, app_class: type) -> None:
         click.echo(f"{i}. {doc.metadata.get('title', 'Untitled')} (ID: {doc.id})")
 
 
-def _delete_all_documents_with_app(app_name: str, app_class: type) -> None:
-    """Helper function to delete all documents using an app"""
-    app = app_class(name=app_name)
+@manage.command(name="delete-all")
+def manage_delete_all() -> None:
+    """Delete all documents from the specified database"""
+    app = BaseApp(name="insightvault.base")
     app.delete_all_documents()
     click.echo("All documents deleted from the database!")
 
@@ -73,20 +86,6 @@ def _delete_all_documents_with_app(app_name: str, app_class: type) -> None:
 def search() -> None:
     """Search operations using the database"""
     pass
-
-
-@search.command(name="add-file")
-@click.argument("filepath", type=click.Path(exists=True))
-def search_add_document(filepath: str) -> None:
-    """Add a document in the filepath to the search database"""
-    _add_document_to_app(filepath, "insightvault.search", SearchApp)
-
-
-@search.command(name="add-text")
-@click.argument("text")
-def search_add_text(text: str) -> None:
-    """Add a text to the search database"""
-    _add_text_to_app(text, "insightvault.search", SearchApp)
 
 
 @search.command(name="query")
@@ -105,36 +104,10 @@ def search_search_documents(query_text: str) -> None:
         click.echo(f"{i}. {result}")
 
 
-@search.command(name="list")
-def search_list_documents() -> None:
-    """List all documents in the search database"""
-    _list_documents_with_app("insightvault.search", SearchApp)
-
-
-@search.command("delete-all")
-def search_delete_all():
-    """Delete all documents from the search database"""
-    _delete_all_documents_with_app("search", SearchApp)
-
-
 @cli.group()
 def chat() -> None:
     """Chat operations using the database"""
     pass
-
-
-@chat.command(name="add-file")
-@click.argument("filepath", type=click.Path(exists=True))
-def chat_add_document(filepath: str) -> None:
-    """Add a document in the filepath to the RAG database"""
-    _add_document_to_app(filepath, "insightvault.rag", RAGApp)
-
-
-@chat.command(name="add-text")
-@click.argument("text")
-def chat_add_text(text: str) -> None:
-    """Add a text to the RAG database"""
-    _add_text_to_app(text, "insightvault.rag", RAGApp)
 
 
 @chat.command(name="query")
@@ -149,20 +122,7 @@ def chat_search_documents(query_text: str) -> None:
         return
 
     click.echo("\nChat response:")
-    # TODO: Implement chat response
     click.echo(results)
-
-
-@chat.command(name="list")
-def chat_list_documents() -> None:
-    """List all documents in the RAG database"""
-    _list_documents_with_app("insightvault.rag", RAGApp)
-
-
-@chat.command("delete-all")
-def chat_delete_all():
-    """Delete all documents from the RAG database"""
-    _delete_all_documents_with_app("rag", RAGApp)
 
 
 @cli.group()

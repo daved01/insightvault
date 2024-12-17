@@ -43,27 +43,3 @@ pytest
 ```
 
 ## Publishing
-
-``bash
-
-# Install build tools
-
-pip install build twine
-
-# Build the package
-
-python -m build
-
-# Check the distribution
-
-twine check dist/*
-
-# Test upload to TestPyPI (optional)
-
-twine upload --repository testpypi dist/*
-
-# Upload to PyPI
-
-twine upload dist/*
-
-```
