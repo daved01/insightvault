@@ -1,8 +1,6 @@
 import asyncio
 
 from ..models.document import Document
-from ..services.embedding import EmbeddingService
-from ..services.splitter import SplitterService
 from .base import BaseApp
 
 
@@ -17,9 +15,6 @@ class SearchApp(BaseApp):
 
     def __init__(self, name: str = "insightvault.app.search") -> None:
         super().__init__(name)
-        # self.db = ChromaDatabaseService()
-        self.splitter = SplitterService()
-        self.embedder = EmbeddingService()
 
     def query(self, query: str) -> list[str]:
         """Query the database for documents similar to the query.

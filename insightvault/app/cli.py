@@ -1,4 +1,3 @@
-import uuid
 from pathlib import Path
 
 import click
@@ -137,15 +136,7 @@ def summarize_text(text: str) -> None:
     """Summarize the provided text"""
     app = SummarizerApp(name="insightvault.summarizer")
 
-    # Create a temporary document for summarization
-    doc = Document(
-        id=str(uuid.uuid4()),
-        content=text,
-        title="Direct Input",
-        metadata={"type": "direct_input"},
-    )
-
-    summary = app.summarize([doc])
+    summary = app.summarize(text)
     click.echo("\nSummary:")
     click.echo(summary)
 
@@ -161,14 +152,7 @@ def summarize_file(filepath: str) -> None:
     with open(path, encoding="utf-8") as f:
         content = f.read()
 
-    # Create document for summarization
-    doc = Document(
-        id=str(uuid.uuid4()),
-        content=content,
-        metadata={"title": path.name, "source": str(path)},
-    )
-
-    summary = app.summarize([doc])
+    summary = app.summarize(content)
     click.echo("\nSummary:")
     click.echo(summary)
 

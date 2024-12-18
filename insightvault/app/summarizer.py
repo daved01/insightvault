@@ -1,6 +1,5 @@
 import asyncio
 
-from ..models.document import Document
 from .base import BaseApp
 
 
@@ -13,14 +12,14 @@ class SummarizerApp(BaseApp):
     def __init__(self, name: str = "insightvault") -> None:
         super().__init__(name)
 
-    def summarize(self, documents: list[Document]) -> str:
+    def summarize(self, text: str) -> str:
         """Summarize a list of documents"""
         self.logger.info("Summarizing document(s)")
         return asyncio.get_event_loop().run_until_complete(
-            self.async_summarize(documents)
+            self.async_summarize(text=text)
         )
 
-    async def async_summarize(self, documents: list[Document]) -> str:
+    async def async_summarize(self, text: str) -> str:
         """Async version of summarize"""
         self.logger.info("Async summarizing document(s)")
-        return "\n".join([doc.content for doc in documents])
+        return f"Async summary of: `{text}`"
