@@ -1,6 +1,8 @@
 import asyncio
 
 from ..models.document import Document
+from ..services.llm import OllamaLLMService
+from ..services.prompt import PromptService
 from .search import SearchApp
 
 
@@ -13,8 +15,9 @@ class RAGApp(SearchApp):
 
     def __init__(self, name: str = "insightvault.app.rag") -> None:
         super().__init__(name)
+        self.prompt_service = PromptService()
+        self.llm = OllamaLLMService()
 
-    # TODO: Implement this RAG-specific query functionality
     def query(self, query: str) -> list[Document]:
         """Query the database for documents similar to the query
 
@@ -32,5 +35,15 @@ class RAGApp(SearchApp):
         self.logger.debug(f"RAG async querying the database for: {query}")
         query_embeddings: list[list[float]] = self.embedder.embed([query])
         response: list[Document] = await self.db.query(query_embeddings[0])
-        # TODO: Implement chat response
-        return "This response is static, you have work to do."
+
+        # Create context from the response
+        context = "\n".join([doc.content for doc in response])
+
+        # Create prompt from the context
+        prompt = self.prompt_service.get_prompt(
+            prompt_type="rag_context", context={"question": query, "context": context}
+        )
+
+        # Query the LLM
+        response = await self.llm.query(prompt=prompt)
+        return response

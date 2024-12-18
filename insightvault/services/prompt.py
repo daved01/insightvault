@@ -11,6 +11,17 @@ class PromptService:
                 "Make the summary concise. Mirror the style of the input text. "
                 "Text to summarize: {text}"
             ),
+            "rag_context": (
+                "You are a friendly, helpful assistant. "
+                "You are given a question and some context below. "
+                "Use the context to answer the question. "
+                "Do not make up information, only use the information in the context. "
+                "If context below does not contain the answer, that is fine. Do not "
+                "use information other that what is in the context."
+                "If you don't know the answer, say 'I don't know'. "
+                "Question: {question}\n"
+                "Context: {context}"
+            ),
         }
 
     def get_prompt(self, prompt_type: str, context: dict | None = None) -> str:
