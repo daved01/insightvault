@@ -53,7 +53,6 @@ class BaseApp:
     async def async_delete_all_documents(self) -> None:
         """Async version of delete_all_documents"""
         self.logger.debug("Async deleting all documents ...")
-        # TODO: Implement async delete_all_documents
         return await self.db.delete_all_documents()
 
     def list_documents(self) -> list[Document] | None:

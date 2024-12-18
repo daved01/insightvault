@@ -30,12 +30,10 @@ def manage_add_file(filepath: str) -> None:
     """Add a document from a file to the specified database"""
     app = BaseApp(name="insightvault.base")
 
-    # Read file content
     path = Path(filepath)
     with open(path, encoding="utf-8") as f:
         content = f.read()
 
-    # Create and add document
     doc = Document(
         title=path.name,
         content=content,
@@ -147,7 +145,6 @@ def summarize_file(filepath: str) -> None:
     """Summarize the content of a file"""
     app = SummarizerApp(name="insightvault.summarizer")
 
-    # Read file content
     path = Path(filepath)
     with open(path, encoding="utf-8") as f:
         content = f.read()

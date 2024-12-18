@@ -56,7 +56,6 @@ class ChromaDatabaseService(AbstractDatabaseService):
     async def init(self) -> None:
         """Initialize the database"""
 
-        # TODO: Factor this out into a provider
         self.client = chromadb.PersistentClient(
             path=self.persist_directory,
             settings=Settings(anonymized_telemetry=False, allow_reset=True),
@@ -70,13 +69,10 @@ class ChromaDatabaseService(AbstractDatabaseService):
         if not self.client:
             await self.init()
 
-        # Get or create collection
         collection = self.client.get_or_create_collection(
             name=collection, metadata=COSINE_SIMILARITY_METADATA
         )
 
-        # Add the documents
-        # TODO: Factor this out into a provider
         collection.add(
             documents=[doc.content for doc in documents],
             metadatas=[doc.metadata for doc in documents],
@@ -95,20 +91,17 @@ class ChromaDatabaseService(AbstractDatabaseService):
         if not self.client:
             await self.init()
 
-        # Get collection
         try:
             collection = self.client.get_collection(name=collection)
         except Exception as e:
             self.logger.error(f"Error getting collection: {e}")
             return []
 
-        # Query the collection
         results = collection.query(
             query_embeddings=[query_embedding],
             n_results=k,
         )
 
-        # Convert results to Document objects
         documents = []
         if results and results["documents"]:
             for i, content in enumerate(results["documents"][0]):
@@ -133,14 +126,12 @@ class ChromaDatabaseService(AbstractDatabaseService):
         if not self.client:
             await self.init()
 
-        # Get collection
         try:
             collection = self.client.get_collection(name=collection)
         except Exception as e:
             self.logger.error(f"Error getting collection: {e}")
             return []
 
-        # List the documents
         response = collection.get()
 
         documents = []
