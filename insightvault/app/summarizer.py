@@ -1,5 +1,6 @@
 import asyncio
 
+from ..services.llm import OllamaLLMService
 from .base import BaseApp
 
 
@@ -11,6 +12,7 @@ class SummarizerApp(BaseApp):
 
     def __init__(self, name: str = "insightvault") -> None:
         super().__init__(name)
+        self.llm = OllamaLLMService()
 
     def summarize(self, text: str) -> str:
         """Summarize a list of documents"""
@@ -22,4 +24,5 @@ class SummarizerApp(BaseApp):
     async def async_summarize(self, text: str) -> str:
         """Async version of summarize"""
         self.logger.info("Async summarizing document(s)")
-        return f"Async summary of: `{text}`"
+        response = await self.llm.query(prompt=text)
+        return f"Respose:\n`{response}`"

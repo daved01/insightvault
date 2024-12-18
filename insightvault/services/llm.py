@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
-from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage
+from ollama import AsyncClient, ChatResponse
 
 
 class LLMService(ABC):
@@ -22,16 +21,34 @@ class LLMService(ABC):
         """Clear the chat history."""
 
 
-# TODO: Find solution to the weights issue
-class MistralLLMService(LLMService):
-    def __init__(self, api_key: str):
-        """
-        Initialize the Mistral LLM using Mistral's API directly.
+class OllamaLLMService(LLMService):
+    """Ollama LLM service"""
 
-        Args:
-            api_key (str): Your Mistral API key
-        """
-        print("🔄 Initializing Mistral client...")
-        self.client = MistralClient(api_key=api_key)
-        self.chat_history: list[ChatMessage] = []
-        print("✅ Client initialized successfully!")
+    def __init__(self, model: str = "llama3") -> None:
+        self.model = model
+        self.chat_history: list[str] = []
+        self.client = AsyncClient()
+
+    def clear_chat_history(self) -> None:
+        """Clear the chat history."""
+        self.chat_history = []
+
+    async def query(self, prompt: str) -> str:
+        """Generate a one-off response from the model without chat history."""
+        response: ChatResponse = await self.client.chat(
+            model=self.model,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ],
+        )
+        return response.message.content
+
+    async def chat(self, prompt: str) -> str:
+        """Generate a response from the model while maintaining chat history."""
+        self.chat_history.append({"role": "user", "content": prompt})
+        response: ChatResponse = await self.query(prompt)
+        self.chat_history.append({"role": "assistant", "content": response})
+        return response
