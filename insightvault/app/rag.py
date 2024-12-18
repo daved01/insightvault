@@ -26,7 +26,6 @@ class RAGApp(SearchApp):
         self.logger.debug(f"RAG querying the database for: {query}")
         return asyncio.get_event_loop().run_until_complete(self.async_query(query))
 
-    # TODO: Implement this RAG-specific query functionality
     async def async_query(self, query: str) -> list[Document]:
         """Async version of query
 
