@@ -3,7 +3,10 @@ from abc import ABC, abstractmethod
 import chromadb
 from chromadb.config import Settings
 
-from ..constants import COSINE_SIMILARITY_METADATA, DEFAULT_COLLECTION_NAME
+from ..constants import (
+    DEFAULT_COLLECTION_NAME,
+)
+from ..models.database import DistanceFunction
 from ..models.document import Document
 from ..utils.logging import get_logger
 
@@ -14,6 +17,11 @@ class AbstractDatabaseService(ABC):
     @abstractmethod
     async def init(self) -> None:
         """Initialize the database"""
+        pass
+
+    @abstractmethod
+    def _get_db_value(self, distance: DistanceFunction) -> str:
+        """Returns the database-specific string for the given distance function."""
         pass
 
     @abstractmethod
@@ -52,6 +60,8 @@ class ChromaDatabaseService(AbstractDatabaseService):
         self.logger = get_logger("insightvault.services.database")
         self.persist_directory = persist_directory
         self.client = None
+        self.similarity_function = self._get_db_value(DistanceFunction.COSINE)
+        self.threshold = 0.9
 
     async def init(self) -> None:
         """Initialize the database"""
@@ -60,6 +70,7 @@ class ChromaDatabaseService(AbstractDatabaseService):
             path=self.persist_directory,
             settings=Settings(anonymized_telemetry=False, allow_reset=True),
         )
+        self.similarity_function = DEFAULT_COLLECTION_NAME
         self.logger.debug("Database initialized")
 
     async def add_documents(
@@ -70,7 +81,7 @@ class ChromaDatabaseService(AbstractDatabaseService):
             await self.init()
 
         collection = self.client.get_or_create_collection(
-            name=collection, metadata=COSINE_SIMILARITY_METADATA
+            name=collection, metadata={"hnsw:space": self.similarity_function}
         )
 
         collection.add(
@@ -85,7 +96,8 @@ class ChromaDatabaseService(AbstractDatabaseService):
         self,
         query_embedding: list[float],
         collection: str = DEFAULT_COLLECTION_NAME,
-        k: int = 10,
+        filter_docs: bool = True,
+        k: int = 8,
     ) -> list[Document] | None:
         """Query the database for documents similar to the query embedding"""
         if not self.client:
@@ -99,8 +111,14 @@ class ChromaDatabaseService(AbstractDatabaseService):
 
         results = collection.query(
             query_embeddings=[query_embedding],
+            include=["documents", "metadatas", "distances"],
             n_results=k,
         )
+
+        # Filter the documents based on the distance
+        if filter_docs:
+            self.logger.debug(f"Filtering documents with threshold: {self.threshold}")
+            results = self._filter_docs(results=results, threshold=self.threshold)
 
         documents = []
         if results and results["documents"]:
@@ -162,3 +180,39 @@ class ChromaDatabaseService(AbstractDatabaseService):
 
         self.client.delete_collection(name=collection)
         self.logger.debug("Deleted all documents in the database")
+
+    def _filter_docs(self, results: dict, threshold: float = 0.9) -> dict:
+        """Filter the documents based on the distance"""
+        ids_to_keep = []
+        embeddings_to_keep = []
+        documents_to_keep = []
+        data_to_keep = []
+        metadatas_to_keep = []
+        # We don't need the distances after filtering
+
+        for i in range(len(results["documents"][0])):
+            if results["distances"][0][i] < threshold:
+                continue
+            documents_to_keep.append(results["documents"][0][i])
+            embeddings_to_keep.append(results["embeddings"][0][i]) if results[
+                "embeddings"
+            ] else None
+            metadatas_to_keep.append(results["metadatas"][0][i]) if results[
+                "metadatas"
+            ] else None
+            ids_to_keep.append(results["ids"][0][i]) if results["ids"] else None
+            data_to_keep.append(results["data"][0][i]) if results["data"] else None
+
+        return {
+            "ids": [ids_to_keep],
+            "documents": [documents_to_keep],
+            "metadatas": [metadatas_to_keep],
+            "embeddings": [embeddings_to_keep],
+            "data": [data_to_keep],
+        }
+
+    def _get_db_value(self, distance: DistanceFunction) -> str:
+        if distance == DistanceFunction.COSINE:
+            return "cosine"
+        elif distance == DistanceFunction.L2:
+            return "l2"

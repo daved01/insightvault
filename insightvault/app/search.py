@@ -24,7 +24,6 @@ class SearchApp(BaseApp):
         self.logger.debug(f"Querying the database for: {query}")
         return asyncio.get_event_loop().run_until_complete(self.async_query(query))
 
-    # TODO: This does not work well because of the database currently.
     async def async_query(self, query: str) -> list[str]:
         """Async version of query"""
         self.logger.debug(f"Async querying the database for: {query}")
