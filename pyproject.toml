@@ -57,4 +57,4 @@ disallow_untyped_defs = true
 insightvault = "run:main"
 
 [tool.hatch.version]
-path = "src/insightvault/__init__.py"
+path = "insightvault/__init__.py"
