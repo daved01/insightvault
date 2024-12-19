@@ -23,30 +23,18 @@ class TestEmbeddingService:
     def test_init_creates_model(self, mock_transformer):
         """Test that init creates the model correctly"""
         service = EmbeddingService(model_name="test-model")
-        service.init()
 
         mock_transformer.assert_called_once_with("test-model")
         assert service.client == mock_transformer.return_value
 
-    def test_embed_initializes_client_if_none(self, embedding_service):
-        """Test that embed initializes client if not already initialized"""
-        embedding_service.client = None
+    @pytest.fixture
+    def mock_sentence_transformer(self):
+        """Create mock SentenceTransformer"""
         mock_client = Mock()
         mock_client.encode.return_value = np.array([[0.1, 0.2, 0.3]])
+        return mock_client
 
-        def mock_init_effect():
-            embedding_service.client = mock_client
-
-        with patch.object(embedding_service, "init") as mock_init:
-            mock_init.side_effect = mock_init_effect
-            result = embedding_service.embed(["test"])
-
-            mock_init.assert_called_once()
-            mock_client.encode.assert_called_once_with(
-                ["test"], batch_size=32, show_progress_bar=False, convert_to_numpy=True
-            )
-            assert result == [[0.1, 0.2, 0.3]]
-
+    @patch("insightvault.services.embedding.SentenceTransformer")
     def test_embed_returns_list_of_embeddings(self, embedding_service, mock_embeddings):
         """Test that embed returns correct format"""
         embedding_service.client.encode.return_value = mock_embeddings
@@ -61,14 +49,22 @@ class TestEmbeddingService:
         assert result[0] == [0.1, 0.2, 0.3]
         assert result[1] == [0.4, 0.5, 0.6]
 
-    def test_embed_calls_encode_with_correct_params(self, embedding_service):
+    @patch("insightvault.services.embedding.SentenceTransformer")
+    def test_embed_calls_encode_with_correct_params(self, mock_transformer):
         """Test that embed calls encode with correct parameters"""
+        # Setup
+        mock_client = Mock()
+        mock_client.encode.return_value = np.array([[0.1, 0.2, 0.3]])
+        mock_transformer.return_value = mock_client
+
+        service = EmbeddingService(model_name="test-model")
         texts = ["Test text"]
-        embedding_service.client.encode.return_value = np.array([[0.1, 0.2, 0.3]])
 
-        result = embedding_service.embed(texts)
+        # Execute
+        result = service.embed(texts)
 
-        embedding_service.client.encode.assert_called_once_with(
+        # Verify
+        mock_client.encode.assert_called_once_with(
             texts, batch_size=32, show_progress_bar=False, convert_to_numpy=True
         )
         assert result == [[0.1, 0.2, 0.3]]

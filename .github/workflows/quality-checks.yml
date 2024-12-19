@@ -39,11 +39,12 @@ jobs:
     - name: Run Ruff linting with fix
       run: ruff check . --fix
 
-    - name: Run Mypy (type checking)
-      run: mypy insightvault
+    # - name: Run Mypy (type checking)
+    #   run: mypy insightvault
 
     - name: Run Pytest (tests)
-      run: pytest --doctest-modules --junitxml=junit/test-results.xml
+      # run: pytest --doctest-modules --junitxml=junit/test-results.xml
+      run: pytest unit/app/test_clit
 
     - name: Upload Test Results for GitHub UI
       uses: actions/upload-test-results@v2

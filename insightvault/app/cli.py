@@ -60,7 +60,7 @@ def manage_add_text(text: str) -> None:
 def manage_list_documents() -> None:
     """List all documents in the specified database"""
     app = BaseApp(name="insightvault.base")
-    documents: list[Document] = app.list_documents()
+    documents: list[Document] | None = app.list_documents()
 
     if not documents:
         click.echo("No documents found in database.")

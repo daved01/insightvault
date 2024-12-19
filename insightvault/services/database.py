@@ -30,7 +30,13 @@ class AbstractDatabaseService(ABC):
         pass
 
     @abstractmethod
-    async def query(self, query_embedding: list[float]) -> list[Document]:
+    async def query(
+        self,
+        query_embedding: list[float],
+        collection_name: str = DEFAULT_COLLECTION_NAME,
+        filter_docs: bool = True,
+        k: int = 8,
+    ) -> list[Document]:
         """Query the database for documents similar to the query embedding"""
         pass
 
@@ -59,31 +65,23 @@ class ChromaDatabaseService(AbstractDatabaseService):
     ):
         self.logger = get_logger("insightvault.services.database")
         self.persist_directory = persist_directory
-        self.client = None
-        self.similarity_function = self._get_db_value(DistanceFunction.COSINE)
-        self.threshold = 0.9
-
-    async def init(self) -> None:
-        """Initialize the database"""
-
         self.client = chromadb.PersistentClient(
             path=self.persist_directory,
             settings=Settings(anonymized_telemetry=False, allow_reset=True),
         )
-        self.similarity_function = DEFAULT_COLLECTION_NAME
+        self.similarity_function = self._get_db_value(DistanceFunction.COSINE)
+        self.threshold = 0.9
         self.logger.debug("Database initialized")
 
     async def add_documents(
-        self, documents: list[Document], collection: str = DEFAULT_COLLECTION_NAME
+        self, documents: list[Document], collection_name: str = DEFAULT_COLLECTION_NAME
     ) -> None:
         """Add a list of documents to the database. The documents must have
         embeddings.
         """
-        if not self.client:
-            await self.init()
 
         collection = self.client.get_or_create_collection(
-            name=collection, metadata={"hnsw:space": self.similarity_function}
+            name=collection_name, metadata={"hnsw:space": self.similarity_function}
         )
 
         collection.add(
@@ -97,16 +95,14 @@ class ChromaDatabaseService(AbstractDatabaseService):
     async def query(
         self,
         query_embedding: list[float],
-        collection: str = DEFAULT_COLLECTION_NAME,
+        collection_name: str = DEFAULT_COLLECTION_NAME,
         filter_docs: bool = True,
         k: int = 8,
     ) -> list[Document] | None:
         """Query the database for documents similar to the query embedding"""
-        if not self.client:
-            await self.init()
 
         try:
-            collection = self.client.get_collection(name=collection)
+            collection = self.client.get_collection(name=collection_name)
         except Exception as e:
             self.logger.error(f"Error getting collection: {e}")
             return []
@@ -140,14 +136,12 @@ class ChromaDatabaseService(AbstractDatabaseService):
         return documents
 
     async def get_documents(
-        self, collection: str = DEFAULT_COLLECTION_NAME
+        self, collection_name: str = DEFAULT_COLLECTION_NAME
     ) -> list[Document] | None:
         """List all documents in the database"""
-        if not self.client:
-            await self.init()
 
         try:
-            collection = self.client.get_collection(name=collection)
+            collection = self.client.get_collection(name=collection_name)
         except Exception as e:
             self.logger.error(f"Error getting collection: {e}")
             return []
@@ -174,13 +168,11 @@ class ChromaDatabaseService(AbstractDatabaseService):
         return documents
 
     async def delete_all_documents(
-        self, collection: str = DEFAULT_COLLECTION_NAME
+        self, collection_name: str = DEFAULT_COLLECTION_NAME
     ) -> None:
         """Delete all documents in the database"""
-        if not self.client:
-            await self.init()
 
-        self.client.delete_collection(name=collection)
+        self.client.delete_collection(name=collection_name)
         self.logger.debug("Deleted all documents in the database")
 
     def _filter_docs(self, results: dict, threshold: float = 0.9) -> dict:

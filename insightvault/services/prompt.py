@@ -24,7 +24,9 @@ class PromptService:
             ),
         }
 
-    def get_prompt(self, prompt_type: str, context: dict | None = None) -> str:
+    def get_prompt(
+        self, prompt_type: str, context: dict[str, str] | None = None
+    ) -> str:
         """
         Retrieves a predefined prompt for a specific use case and injects
         context if needed. The context can include parameters like 'text', etc.
