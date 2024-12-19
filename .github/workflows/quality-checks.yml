@@ -43,7 +43,7 @@ jobs:
 
     - name: Run Pytest (tests)
       # run: pytest --doctest-modules --junitxml=junit/test-results.xml
-      run: pytest unit/app/test_clit
+      run: pytest unit/app/test_cli.py
 
     # - name: Upload Test Results for GitHub UI
     #   uses: actions/upload-test-results@v2
