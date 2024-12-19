@@ -165,6 +165,6 @@ class TestCLI:
     def test_invalid_command(self, runner):
         """Test invalid command handling"""
         result = runner.invoke(cli, ["invalid"])
-
-        assert result.exit_code == 2
+        expected_exit_code = 2
+        assert result.exit_code == expected_exit_code
         assert "No such command" in result.output

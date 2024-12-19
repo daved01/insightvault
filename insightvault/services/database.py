@@ -76,7 +76,9 @@ class ChromaDatabaseService(AbstractDatabaseService):
     async def add_documents(
         self, documents: list[Document], collection: str = DEFAULT_COLLECTION_NAME
     ) -> None:
-        """Add a list of documents to the database. The documents must have embeddings."""
+        """Add a list of documents to the database. The documents must have
+        embeddings.
+        """
         if not self.client:
             await self.init()
 

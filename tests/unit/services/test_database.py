@@ -133,7 +133,8 @@ class TestChromaDatabaseService:
 
         documents = await service.get_documents()
 
-        assert len(documents) == 2
+        expected_docs_count = 2
+        assert len(documents) == expected_docs_count
         assert documents[0].title == "Doc 1"
         assert documents[1].title == "Doc 2"
 

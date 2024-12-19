@@ -10,7 +10,8 @@ class RAGApp(SearchApp):
     """RAG application for retrieval-augmented generation
 
     This application extends the SearchApp with RAG-specific query functionality.
-    All other methods (add_documents, delete_documents, etc.) are inherited from SearchApp.
+    All other methods (add_documents, delete_documents, etc.) are inherited from
+    SearchApp.
     """
 
     def __init__(self, name: str = "insightvault.app.rag") -> None:

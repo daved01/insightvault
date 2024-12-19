@@ -39,7 +39,8 @@ class TestSplitterService:
         """Test that split creates multiple chunks from a document"""
         chunks = splitter.split(sample_document)
 
-        assert len(chunks) == 3
+        expected_chunks_count = 3
+        assert len(chunks) == expected_chunks_count
         assert all(isinstance(chunk, Document) for chunk in chunks)
 
     def test_splitter_initialization(self, mock_splitter):

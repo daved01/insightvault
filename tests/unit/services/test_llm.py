@@ -47,7 +47,8 @@ class TestOllamaLLMService:
         response = await llm_service.chat("Test prompt")
 
         assert response == "This is a mock response"
-        assert len(llm_service.chat_history) == 2
+        expected_chat_history_count = 2
+        assert len(llm_service.chat_history) == expected_chat_history_count
         assert llm_service.chat_history[0] == {"role": "user", "content": "Test prompt"}
         assert llm_service.chat_history[1] == {
             "role": "assistant",
@@ -77,7 +78,8 @@ class TestOllamaLLMService:
         await llm_service.chat("First prompt")
         await llm_service.chat("Second prompt")
 
-        assert len(llm_service.chat_history) == 4
+        expected_chat_history_count = 4
+        assert len(llm_service.chat_history) == expected_chat_history_count
         assert llm_service.chat_history[0]["content"] == "First prompt"
         assert llm_service.chat_history[2]["content"] == "Second prompt"
 

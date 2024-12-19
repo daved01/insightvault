@@ -72,7 +72,8 @@ class TestBaseApp:
 
         # Verify documents were added to db with embeddings
         processed_docs = base_app.db.add_documents.call_args[0][0]
-        assert len(processed_docs) == 2
+        expected_docs_count = 2
+        assert len(processed_docs) == expected_docs_count
         assert processed_docs[0].embedding == [0.1, 0.2]
         assert processed_docs[1].embedding == [0.3, 0.4]
 

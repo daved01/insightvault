@@ -55,7 +55,8 @@ class TestEmbeddingService:
         result = embedding_service.embed(texts)
 
         assert isinstance(result, list)
-        assert len(result) == 2
+        expected_embeddings_count = 2
+        assert len(result) == expected_embeddings_count
         assert isinstance(result[0], list)
         assert result[0] == [0.1, 0.2, 0.3]
         assert result[1] == [0.4, 0.5, 0.6]
