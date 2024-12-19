@@ -38,8 +38,8 @@ jobs:
     - name: Run Ruff linting with fix
       run: ruff check . --fix
 
-    # - name: Run Mypy (type checking)
-    #   run: mypy insightvault
+    - name: Run Mypy (type checking)
+      run: mypy insightvault
 
     - name: Run Pytest
-      run: pytest tests/unit/app/test_cli.py
+      run: pytest tests

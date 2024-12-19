@@ -7,7 +7,7 @@
  <img src="https://github.com/daved01/insight-vault/actions/workflows/quality-checks.yml/badge.svg" alt="GitHub CI">
 </p>
 
-**Insight Vault** is a local, privacy-focused Retrieval-Augmented Generation (RAG) application. It allows you to store, search, and analyze your documents completely offline.
+**Insight Vault** is a local, privacy-focused library for building LLM-based applications. It allows you to store, search, and summarize text completely offline.
 
 With **Insight Vault**, you can:
 
@@ -17,16 +17,12 @@ With **Insight Vault**, you can:
 
 All data stays **on your machine**, with no external API calls required.
 
----
-
 ## 🚀 **Features**
 
-- **Privacy-first RAG** — Store and query documents locally with ChromaDB.
 - **Local Inference** — Uses LLAMA for local LLM inference.
-- **Local Embeddings** — Embeddings are created using HuggingFace models.
+- **Local Embeddings** — Embeddings are created using SentenceTransformers.
+- **Privacy-first RAG** — Store and query documents locally with ChromaDB.
 - **Interactive CLI** — Intuitive CLI interface for searching, managing, and summarizing.
-
----
 
 ## 📦 **Dependencies**
 
@@ -36,8 +32,6 @@ The following dependencies are required to run **Insight Vault**:
 - [**ChromaDB**](https://docs.trychroma.com/) — Local document storage and vector database.
 - [**SentenceTransformers**](https://www.sbert.net/) — Embeddings for better document search and query matching.
 
----
-
 ## 🔥 **Installation**
 
 To install **Insight Vault**, you can use the following command:
@@ -46,11 +40,11 @@ To install **Insight Vault**, you can use the following command:
 pip install insightvault
 ```
 
----
-
 ## ⚙️ **Usage**
 
-Insight Vault can be used via a simple CLI interface.
+Insight Vault can be used via a simple CLI interface or as a Python library.
+
+### CLI
 
 **Adding Documents**
 
@@ -84,7 +78,24 @@ insightvault summarize text "Explain RAG pipelines"
 
 Summarizes the text you provide. The option `file` can be used to summarize a file.
 
----
+### Library
+
+Insightvault provides three apps as part of the library:
+
+- `RAGApp` — For RAG pipelines.
+- `SearchApp` — For searching indexed documents.
+- `SummarizerApp` — For summarizing text.
+
+For example, to use the `SummarizerApp`, you can do the following:
+
+```python
+from insightvault import SummarizerApp
+
+app = SummarizerApp()
+await app.summarize("This is a loooong test")
+```
+
+See the [API Documentation](TODO!) for more information.
 
 ## 🛠️ **Development**
 
@@ -108,7 +119,7 @@ This installs all required libraries for development, testing, and quality check
 3. Run Tests
 
 ```bash
-pytest
+pytest tests
 ```
 
 This runs all the unit and integration tests to ensure everything is working properly.
