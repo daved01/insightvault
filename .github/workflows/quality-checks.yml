@@ -41,5 +41,5 @@ jobs:
     # - name: Run Mypy (type checking)
     #   run: mypy insightvault
 
-    - name: Run Pytest (tests)
+    - name: Run Pytest
       run: pytest tests/unit/app/test_cli.py

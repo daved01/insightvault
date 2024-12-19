@@ -1,15 +1,11 @@
 # Insight Vault
 
 <p align="center">
-  <a href="https://github.com/daved01/insightvault/actions/workflows/quality-checks.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/daved01/insightvault/quality-checks.yml?branch=main&label=Quality%20Checks&style=for-the-badge" alt="Quality Checks">
-  </a>
-  <a href="https://www.python.org/downloads/">
-    <img src="https://img.shields.io/badge/python-3.8%2B-blue?style=for-the-badge" alt="Python version">
-  </a>
+ <a href="https://www.python.org/downloads/release/python-312/"><img src="https://img.shields.io/badge/python-3.12-green.svg" alt="Python 3.12"></a>
+ <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
+  <a href="https://pypi.org/project/insightvault"><img alt="PyPI - Version" src="https://img.shields.io/pypi/v/insightvault?color=blue"></a>
+ <img src="https://github.com/daved01/insight-vault/actions/workflows/quality-checks.yml/badge.svg" alt="GitHub CI">
 </p>
-
----
 
 **Insight Vault** is a local, privacy-focused Retrieval-Augmented Generation (RAG) application. It allows you to store, search, and analyze your documents completely offline.
 
