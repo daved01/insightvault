@@ -29,11 +29,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install .
+          python -m pip install --upgrade pip
+          pip install ".[dev]"
+          pip install ruff mypy types-all
 
-    - name: Run Ruff (linting and formatting)
-      run: ruff . --format text
+    - name: Run Ruff formatting
+      run: ruff format .
+
+    - name: Run Ruff linting with fix
+      run: ruff check . --fix
 
     - name: Run Mypy (type checking)
       run: mypy insightvault

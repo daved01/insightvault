@@ -42,4 +42,12 @@ pip install -e ".[dev]"
 pytest
 ```
 
+Checks
+
+```bash
+mypy insightvault
+ruff check . --fix
+ruff format .
+```
+
 ## Publishing
