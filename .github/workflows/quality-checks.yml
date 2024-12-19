@@ -46,7 +46,7 @@ jobs:
       # run: pytest --doctest-modules --junitxml=junit/test-results.xml
       run: pytest unit/app/test_clit
 
-    - name: Upload Test Results for GitHub UI
-      uses: actions/upload-test-results@v2
-      with:
-        path: junit/test-results.xml
+    # - name: Upload Test Results for GitHub UI
+    #   uses: actions/upload-test-results@v2
+    #   with:
+    #     path: junit/test-results.xml
