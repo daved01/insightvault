@@ -43,7 +43,7 @@ class BaseApp:
 
             # Get embeddings for the chunk contents
             chunk_contents = [chunk.content for chunk in chunks]
-            embeddings = self.embedder.embed(chunk_contents)
+            embeddings = await self.embedder.embed(chunk_contents)
 
             # Add embeddings to chunks
             for chunk, embedding in zip(chunks, embeddings, strict=True):  # type: ignore

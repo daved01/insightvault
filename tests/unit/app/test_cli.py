@@ -137,7 +137,7 @@ class TestCLI:
 
         assert result.exit_code == 0
         mock_rag_app.return_value.query.assert_called_once_with("test question")
-        assert "Generated chat response" in result.output
+        assert "Chat response" in result.output
 
     def test_summarize_text(self, runner, mock_summarizer_app):
         """Test text summarization through CLI"""

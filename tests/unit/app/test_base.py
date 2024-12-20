@@ -7,6 +7,18 @@ from insightvault.models.document import Document
 
 
 class TestBaseApp:
+    @pytest.fixture(autouse=True)
+    def mock_dependencies(self):
+        """Mock all external dependencies"""
+        with patch(
+            "insightvault.app.base.EmbeddingService", autospec=True
+        ) as mock_embedding_service:
+            # Configure the mock embedding service
+            instance = mock_embedding_service.return_value
+            instance.embed = AsyncMock(return_value=[[0.1, 0.2], [0.3, 0.4]])
+            instance.get_model = AsyncMock()
+            yield mock_embedding_service
+
     @pytest.fixture
     def mock_db_service(self):
         """Create a mock database service"""
@@ -31,23 +43,14 @@ class TestBaseApp:
         return service
 
     @pytest.fixture
-    def mock_embedding_service(self):
-        """Create a mock embedding service"""
-        service = Mock()
-        service.embed.return_value = [[0.1, 0.2], [0.3, 0.4]]
-        return service
-
-    @pytest.fixture
-    def base_app(self, mock_db_service, mock_splitter_service, mock_embedding_service):
+    def base_app(self, mock_db_service, mock_splitter_service):
         """Create a base app with mocked services"""
         with (
             patch("insightvault.app.base.ChromaDatabaseService") as mock_db_class,
             patch("insightvault.app.base.SplitterService") as mock_splitter_class,
-            patch("insightvault.app.base.EmbeddingService") as mock_embedding_class,
         ):
             mock_db_class.return_value = mock_db_service
             mock_splitter_class.return_value = mock_splitter_service
-            mock_embedding_class.return_value = mock_embedding_service
 
             app = BaseApp()
             return app
@@ -60,8 +63,13 @@ class TestBaseApp:
         )
 
     @pytest.mark.asyncio
-    async def test_add_documents_processes_correctly(self, base_app, sample_document):
+    async def test_add_documents_processes_correctly(
+        self,
+        base_app,
+        sample_document,
+    ):
         """Test that add_documents processes documents correctly"""
+        await base_app.init_base()
         await base_app.async_add_documents([sample_document])
 
         # Verify splitter was called
@@ -117,8 +125,8 @@ class TestBaseApp:
     @pytest.mark.asyncio
     async def test_add_documents_preserves_metadata(self, base_app, sample_document):
         """Test that document metadata is preserved through processing"""
+        await base_app.init_base()
         await base_app.async_add_documents([sample_document])
-
         processed_docs = base_app.db.add_documents.call_args[0][0]
         for doc in processed_docs:
             assert doc.metadata["source"] == "test"
