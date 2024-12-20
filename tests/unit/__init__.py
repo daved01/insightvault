@@ -22,13 +22,17 @@ class BaseTest:
         """Create sample retrieved documents"""
         return [
             Document(
+                id="1",
                 title="Doc 1",
                 content="Content from first document",
                 metadata={"source": "test"},
+                embedding=[0.1, 0.2, 0.3],
             ),
             Document(
+                id="2",
                 title="Doc 2",
                 content="Content from second document",
                 metadata={"source": "test"},
+                embedding=[0.4, 0.5, 0.6],
             ),
         ]

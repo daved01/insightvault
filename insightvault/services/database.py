@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
+from typing import Any
 
 import chromadb
 from chromadb.config import Settings
@@ -27,7 +29,7 @@ class AbstractDatabaseService(ABC):
     @abstractmethod
     async def query(
         self,
-        query_embedding: list[float],
+        query_embedding: Sequence[float],
         collection_name: str = DEFAULT_COLLECTION_NAME,
         filter_docs: bool = True,
         k: int = 8,
@@ -36,7 +38,7 @@ class AbstractDatabaseService(ABC):
         pass
 
     @abstractmethod
-    async def get_documents(self) -> list[Document]:
+    async def get_documents(self) -> list[Document] | None:
         """Get all documents from the database"""
         pass
 
@@ -74,26 +76,28 @@ class ChromaDatabaseService(AbstractDatabaseService):
         """Add a list of documents to the database. The documents must have
         embeddings.
         """
+        if not documents:
+            self.logger.warning("No documents to add to the database")
 
         collection = self.client.get_or_create_collection(
             name=collection_name, metadata={"hnsw:space": self.similarity_function}
         )
 
         collection.add(
+            ids=[doc.id for doc in documents],
             documents=[doc.content for doc in documents],
             metadatas=[doc.metadata for doc in documents],
-            embeddings=[doc.embedding for doc in documents],
-            ids=[doc.id for doc in documents],
+            embeddings=[doc.embedding for doc in documents],  # type: ignore
         )
         self.logger.debug(f"Added {len(documents)} documents to the database")
 
     async def query(
         self,
-        query_embedding: list[float],
+        query_embedding: Sequence[float],
         collection_name: str = DEFAULT_COLLECTION_NAME,
         filter_docs: bool = True,
         k: int = 8,
-    ) -> list[Document] | None:
+    ) -> list[Document]:
         """Query the database for documents similar to the query embedding"""
 
         try:
@@ -104,7 +108,7 @@ class ChromaDatabaseService(AbstractDatabaseService):
 
         results = collection.query(
             query_embeddings=[query_embedding],
-            include=["documents", "metadatas", "distances"],
+            include=["documents", "metadatas", "distances"],  # type: ignore[list-item]
             n_results=k,
         )
 
@@ -116,12 +120,12 @@ class ChromaDatabaseService(AbstractDatabaseService):
         documents = []
         if results and results["documents"]:
             for i, content in enumerate(results["documents"][0]):
-                metadata = results["metadatas"][0][i]
+                metadata = results["metadatas"][0][i]  # type: ignore
                 doc_id = results["ids"][0][i]
                 documents.append(
                     Document(
                         id=doc_id,
-                        title=metadata.get("title", "Unknown"),
+                        title=str(metadata.get("title", "Unknown")),
                         content=content,
                         metadata=metadata,
                     )
@@ -147,17 +151,19 @@ class ChromaDatabaseService(AbstractDatabaseService):
         response_ids = response.get("ids")
         response_contents = response.get("documents")
         response_metadatas = response.get("metadatas")
-        for doc_id, content, metadata in zip(
-            response_ids, response_contents, response_metadatas, strict=False
-        ):
-            documents.append(
-                Document(
-                    id=doc_id,
-                    title=metadata.get("title", "Unknown"),
-                    content=content,
-                    metadata=metadata,
+
+        if response_ids and response_contents and response_metadatas:
+            for doc_id, content, metadata in zip(
+                response_ids, response_contents, response_metadatas, strict=False
+            ):
+                documents.append(
+                    Document(
+                        id=doc_id,
+                        title=str(metadata.get("title", "Unknown")),
+                        content=content,
+                        metadata=metadata,
+                    )
                 )
-            )
 
         self.logger.debug(f"Found {len(documents)} documents in the database")
         return documents
@@ -170,15 +176,15 @@ class ChromaDatabaseService(AbstractDatabaseService):
         self.client.delete_collection(name=collection_name)
         self.logger.debug("Deleted all documents in the database")
 
-    def _filter_docs(self, results: dict, threshold: float = 0.9) -> dict:
+    def _filter_docs(self, results: Any, threshold: float = 0.9) -> Any:
         """Filter the documents based on the distance"""
         ids_to_keep = []
         embeddings_to_keep = []
         documents_to_keep = []
         data_to_keep = []
         metadatas_to_keep = []
-        # We don't need the distances after filtering
 
+        # We don't need the distances after filtering
         for i in range(len(results["documents"][0])):
             if results["distances"][0][i] < threshold:
                 continue

@@ -3,11 +3,11 @@ from unittest.mock import Mock, patch
 import pytest
 
 from insightvault.models.database import DistanceFunction
-from insightvault.models.document import Document
 from insightvault.services.database import ChromaDatabaseService
+from tests.unit import BaseTest
 
 
-class TestChromaDatabaseService:
+class TestChromaDatabaseService(BaseTest):
     @pytest.fixture
     def mock_collection(self):
         """Create a mock Chroma collection"""
@@ -33,25 +33,25 @@ class TestChromaDatabaseService:
         service.client = mock_client
         return service
 
-    @pytest.fixture
-    def sample_documents(self):
-        """Create sample documents for testing"""
-        return [
-            Document(
-                id="1",
-                title="Doc 1",
-                content="Content 1",
-                metadata={"source": "test"},
-                embedding=[0.1, 0.2, 0.3],
-            ),
-            Document(
-                id="2",
-                title="Doc 2",
-                content="Content 2",
-                metadata={"source": "test"},
-                embedding=[0.4, 0.5, 0.6],
-            ),
-        ]
+    # @pytest.fixture
+    # def sample_documents(self):
+    #     """Create sample documents for testing"""
+    #     return [
+    #         Document(
+    #             id="1",
+    #             title="Doc 1",
+    #             content="Content 1",
+    #             metadata={"source": "test"},
+    #             embedding=[0.1, 0.2, 0.3],
+    #         ),
+    #         Document(
+    #             id="2",
+    #             title="Doc 2",
+    #             content="Content 2",
+    #             metadata={"source": "test"},
+    #             embedding=[0.4, 0.5, 0.6],
+    #         ),
+    #     ]
 
     @pytest.mark.asyncio
     @patch("insightvault.services.database.chromadb")
@@ -60,7 +60,6 @@ class TestChromaDatabaseService:
         """Test database initialization"""
         # Create and initialize service
         service = ChromaDatabaseService(persist_directory="data/.db")
-        await service.init()
 
         # Check PersistentClient was called
         assert len(mock_chromadb.mock_calls) == 1
