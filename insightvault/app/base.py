@@ -46,7 +46,7 @@ class BaseApp:
             embeddings = await self.embedder.embed(chunk_contents)
 
             # Add embeddings to chunks
-            for chunk, embedding in zip(chunks, embeddings, strict=True):  # type: ignore
+            for chunk, embedding in zip(chunks, embeddings, strict=True):
                 chunk.embedding = embedding
                 processed_documents.append(chunk)
 
