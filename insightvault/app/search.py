@@ -27,7 +27,7 @@ class SearchApp(BaseApp):
     async def async_query(self, query: str) -> list[str]:
         """Async version of query"""
         self.logger.debug(f"Async querying the database for: {query}")
-
-        query_embeddings: list[list[float]] = self.embedder.embed([query])
+        await self.init()
+        query_embeddings: list[list[float]] = await self.embedder.embed([query])
         response: list[Document] = await self.db.query(query_embeddings[0])
         return sorted(set(doc.title for doc in response))

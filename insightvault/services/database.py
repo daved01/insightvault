@@ -15,11 +15,6 @@ class AbstractDatabaseService(ABC):
     """Abstract database service"""
 
     @abstractmethod
-    async def init(self) -> None:
-        """Initialize the database"""
-        pass
-
-    @abstractmethod
     def _get_db_value(self, distance: DistanceFunction) -> str:
         """Returns the database-specific string for the given distance function."""
         pass

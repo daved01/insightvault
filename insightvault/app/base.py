@@ -9,11 +9,18 @@ from ..utils.logging import get_logger
 
 class BaseApp:
     def __init__(self, name: str = "insightvault.app") -> None:
-        self.name = name  # TODO: Remove
-        self.logger = get_logger(self.name)
+        self.name = name
+        self.logger = get_logger(name)
         self.db = ChromaDatabaseService()
         self.splitter = SplitterService()
+        self.embedder: EmbeddingService | None = None
+
+    async def init(self) -> None:
+        """Initialize the app"""
+        self.logger.debug(f"Initializing BaseApp `{self.name}` ...")
         self.embedder = EmbeddingService()
+        await self.embedder.get_client()
+        self.logger.debug(f"BaseApp `{self.name}` initialized!")
 
     def add_documents(self, documents: list[Document]) -> None:
         """Add documents to the database"""

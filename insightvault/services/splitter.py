@@ -5,7 +5,13 @@ from ..utils.logging import get_logger
 
 
 class SplitterService:
-    """Splitter service"""
+    """Splitter service
+
+
+    Attributes:
+        chunk_size: The size of each chunk (default: 1024)
+        chunk_overlap: The overlap between chunks (default: 256)
+    """
 
     def __init__(self, chunk_size: int = 1024, chunk_overlap: int = 256):
         self.logger = get_logger("insightvault.splitter")
