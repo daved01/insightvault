@@ -17,7 +17,20 @@ class RAGApp(SearchApp):
     def __init__(self, name: str = "insightvault.app.rag") -> None:
         super().__init__(name)
         self.prompt_service = PromptService()
+        self.llm = None
+
+    async def _init_rag(self) -> None:
+        """Initialize the RAG part of the application"""
+        self.logger.debug("Initializing RAG application")
         self.llm = OllamaLLMService()
+        await self.llm.get_client()
+        self.logger.debug("RAG application initialized")
+
+    async def init_rag(self) -> None:
+        """Initialize the RAG application"""
+        # TODO: This should be done with asyncio.gather
+        await self.init_base()
+        await self._init_rag()
 
     def query(self, query: str) -> str:
         """Query the database for documents similar to the query
@@ -33,7 +46,8 @@ class RAGApp(SearchApp):
         This RAG-specific implementation returns Document objects instead of strings.
         """
         self.logger.debug(f"RAG async querying the database for: {query}")
-        query_embeddings: list[list[float]] = self.embedder.embed([query])
+        await self.init_rag()
+        query_embeddings: list[list[float]] = await self.embedder.embed([query])
         query_response: list[Document] | None = await self.db.query(query_embeddings[0])
 
         # Create context from the response

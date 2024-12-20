@@ -4,15 +4,17 @@ import pytest
 
 from insightvault.app.rag import RAGApp
 from insightvault.models.document import Document
+from tests.unit import BaseTest
 from tests.unit.app.test_base import TestBaseApp
 
 
-class TestRAGApp(TestBaseApp):
+class TestRAGApp(TestBaseApp, BaseTest):
     @pytest.fixture
     def mock_llm_service(self):
         """Create a mock LLM service"""
         service = AsyncMock()
         service.query = AsyncMock(return_value="Generated response")
+        service.get_client = AsyncMock()
         return service
 
     @pytest.fixture
@@ -48,22 +50,6 @@ class TestRAGApp(TestBaseApp):
             app = RAGApp()
             return app
 
-    @pytest.fixture
-    def sample_documents(self):
-        """Create sample retrieved documents"""
-        return [
-            Document(
-                title="Doc 1",
-                content="Content from first document",
-                metadata={"source": "test"},
-            ),
-            Document(
-                title="Doc 2",
-                content="Content from second document",
-                metadata={"source": "test"},
-            ),
-        ]
-
     @pytest.mark.asyncio
     async def test_async_query_generates_response(self, rag_app, sample_documents):
         """Test that query retrieves documents and generates response"""
@@ -71,7 +57,13 @@ class TestRAGApp(TestBaseApp):
         rag_app.embedder.embed.return_value = [[0.1, 0.2, 0.3]]
         rag_app.db.query.return_value = sample_documents
 
+        # Initialize RAG app
+        await rag_app.init_rag()
+
         result = await rag_app.async_query("test query")
+
+        # Verify initialization was called
+        rag_app.llm.get_client.assert_called_once()
 
         # Verify embeddings were generated
         rag_app.embedder.embed.assert_called_once_with(["test query"])
@@ -106,15 +98,12 @@ class TestRAGApp(TestBaseApp):
         rag_app.embedder.embed.return_value = [[0.1, 0.2, 0.3]]
         rag_app.db.query.return_value = []
 
+        # Initialize RAG app
+        await rag_app.init_rag()
+
         result = await rag_app.async_query("test query")
 
-        # Verify prompt was generated with empty context
-        rag_app.prompt_service.get_prompt.assert_called_once_with(
-            prompt_type="rag_context",
-            context={"question": "test query", "context": ""},
-        )
-
-        assert result == "Generated response"
+        assert result == "No documents found in the database."
 
     @pytest.mark.asyncio
     async def test_async_query_preserves_question(self, rag_app):
@@ -147,3 +136,15 @@ class TestRAGApp(TestBaseApp):
             prompt_type="rag_context",
             context={"question": "test query", "context": expected_context},
         )
+
+    @pytest.mark.asyncio
+    async def test_init_rag_initializes_services(self, rag_app):
+        """Test that init_rag properly initializes all services"""
+        await rag_app.init_rag()
+
+        # Verify base services were initialized
+        rag_app.db.init_db.assert_called_once()
+        rag_app.embedder.get_model.assert_called_once()
+
+        # Verify RAG-specific services were initialized
+        rag_app.llm.get_client.assert_called_once()

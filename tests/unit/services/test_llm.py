@@ -19,9 +19,9 @@ class TestOllamaLLMService:
         return MockResponse()
 
     @pytest.fixture
-    def llm_service(self):
+    async def llm_service(self):
         """Create LLM service with mocked client"""
-        service = OllamaLLMService(model="test-model")
+        service = OllamaLLMService(model_name="test-model")
         service.client = AsyncMock()
         service.client.chat.side_effect = [None]
         return service
@@ -29,12 +29,13 @@ class TestOllamaLLMService:
     @pytest.mark.asyncio
     async def test_query_returns_response(self, llm_service, mock_chat_response):
         """Test that query returns the expected response"""
-        llm_service.client.chat.side_effect = [mock_chat_response]
+        service = await llm_service
+        service.client.chat.side_effect = [mock_chat_response]
 
-        response = await llm_service.query("Test prompt")
+        response = await service.query("Test prompt")
 
         assert response == "This is a mock response"
-        llm_service.client.chat.assert_called_once_with(
+        service.client.chat.assert_called_once_with(
             model="test-model",
             messages=[{"role": "user", "content": "Test prompt"}],
         )
@@ -42,51 +43,53 @@ class TestOllamaLLMService:
     @pytest.mark.asyncio
     async def test_chat_maintains_history(self, llm_service, mock_chat_response):
         """Test that chat maintains conversation history"""
-        llm_service.client.chat.side_effect = [mock_chat_response]
+        service = await llm_service
+        service.client.chat.side_effect = [mock_chat_response]
+        num_history_items = 2
 
-        response = await llm_service.chat("Test prompt")
+        response = await service.chat("Test prompt")
 
         assert response == "This is a mock response"
-        expected_chat_history_count = 2
-        assert len(llm_service.chat_history) == expected_chat_history_count
-        assert llm_service.chat_history[0] == {"role": "user", "content": "Test prompt"}
-        assert llm_service.chat_history[1] == {
+        assert len(service.chat_history) == num_history_items
+        assert service.chat_history[0] == {"role": "user", "content": "Test prompt"}
+        assert service.chat_history[1] == {
             "role": "assistant",
             "content": "This is a mock response",
         }
 
-    def test_clear_chat_history(self, llm_service):
+    @pytest.mark.asyncio
+    async def test_clear_chat_history(self, llm_service):
         """Test that clear_chat_history removes all history"""
-        llm_service.chat_history = [
+        service = await llm_service
+        service.chat_history = [
             {"role": "user", "content": "test"},
             {"role": "assistant", "content": "response"},
         ]
 
-        llm_service.clear_chat_history()
+        service.clear_chat_history()
 
-        assert len(llm_service.chat_history) == 0
+        assert len(service.chat_history) == 0
 
     @pytest.mark.asyncio
     async def test_chat_with_multiple_turns(self, llm_service, mock_chat_response):
         """Test multiple turns of conversation"""
-
-        llm_service.client.chat.side_effect = [
+        service = await llm_service
+        service.client.chat.side_effect = [
             mock_chat_response,
             mock_chat_response,
         ]
+        num_history_items = 4
 
-        await llm_service.chat("First prompt")
-        await llm_service.chat("Second prompt")
-
-        expected_chat_history_count = 4
-        assert len(llm_service.chat_history) == expected_chat_history_count
-        assert llm_service.chat_history[0]["content"] == "First prompt"
-        assert llm_service.chat_history[2]["content"] == "Second prompt"
+        await service.chat("First prompt")
+        await service.chat("Second prompt")
+        assert len(service.chat_history) == num_history_items
+        assert service.chat_history[0]["content"] == "First prompt"
+        assert service.chat_history[2]["content"] == "Second prompt"
 
     @pytest.mark.asyncio
     async def test_query_with_different_model(self, mock_chat_response):
         """Test query with a different model"""
-        service = OllamaLLMService(model="different-model")
+        service = OllamaLLMService(model_name="different-model")
         service.client = AsyncMock()
         service.client.chat.return_value = mock_chat_response
 

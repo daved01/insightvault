@@ -44,6 +44,8 @@ pip install insightvault
 
 Insight Vault can be used via a simple CLI interface or as a Python library.
 
+If you want to use the `chat` or `summarize` commands, you need to make sure that Ollama is running first.
+
 ### CLI
 
 **Adding Documents**
@@ -57,7 +59,7 @@ This command will add a file from the specified path to the local document datab
 **Searching Documents**
 
 ```bash
-insightvault search query "Explain RAG pipelines"
+insightvault search "Explain RAG pipelines"
 ```
 
 This will search your indexed documents for the query “Explain RAG pipelines” and return the most relevant results.
@@ -65,7 +67,7 @@ This will search your indexed documents for the query “Explain RAG pipelines�
 **Chat**
 
 ```bash
-insightvault chat query "Explain RAG pipelines"
+insightvault chat "Explain RAG pipelines"
 ```
 
 This uses RAG which means it takes in a natural language query and returns a response in natural language based on the most relevant documents you have indexed.
@@ -73,10 +75,10 @@ This uses RAG which means it takes in a natural language query and returns a res
 **Summarizing Documents**
 
 ```bash
-insightvault summarize text "Explain RAG pipelines"
+insightvault summarize "Explain RAG pipelines"
 ```
 
-Summarizes the text you provide. The option `file` can be used to summarize a file.
+Summarizes the text you provide. The flag `--file` can be used to summarize a file.
 
 ### Library
 

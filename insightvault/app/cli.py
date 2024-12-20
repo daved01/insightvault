@@ -79,15 +79,9 @@ def manage_delete_all() -> None:
     click.echo("All documents deleted from the database!")
 
 
-@cli.group()
-def search() -> None:
-    """Search operations using the database"""
-    pass
-
-
-@search.command(name="query")
+@cli.command(name="search")
 @click.argument("query_text")
-def search_search_documents(query_text: str) -> None:
+def search_documents(query_text: str) -> None:
     """Search documents in the database"""
     app = SearchApp(name="insightvault.search")
     results: list[str] = app.query(query_text)
@@ -101,13 +95,7 @@ def search_search_documents(query_text: str) -> None:
         click.echo(f"{i}. {result}")
 
 
-@cli.group()
-def chat() -> None:
-    """Chat operations using the database"""
-    pass
-
-
-@chat.command(name="query")
+@cli.command(name="chat")
 @click.argument("query_text")
 def chat_search_documents(query_text: str) -> None:
     """Search documents in the database and return a chat response"""
@@ -122,32 +110,30 @@ def chat_search_documents(query_text: str) -> None:
     click.echo(results)
 
 
-@cli.group()
-def summarize() -> None:
-    """Summarization operations"""
-    pass
+@cli.command(name="summarize")
+@click.argument("input_text")
+@click.option("--file", "-f", is_flag=True, help="Treat input as a file path")
+def summarize(input_text: str, file: bool = False) -> None:
+    """Summarize text or file content
 
-
-@summarize.command(name="text")
-@click.argument("text")
-def summarize_text(text: str) -> None:
-    """Summarize the provided text"""
+    If --file flag is used, input_text is treated as a file path.
+    Otherwise, input_text is treated as the text to summarize.
+    """
     app = SummarizerApp(name="insightvault.summarizer")
 
-    summary = app.summarize(text)
-    click.echo("\nSummary:")
-    click.echo(summary)
-
-
-@summarize.command(name="file")
-@click.argument("filepath", type=click.Path(exists=True))
-def summarize_file(filepath: str) -> None:
-    """Summarize the content of a file"""
-    app = SummarizerApp(name="insightvault.summarizer")
-
-    path = Path(filepath)
-    with open(path, encoding="utf-8") as f:
-        content = f.read()
+    if file:
+        try:
+            path = Path(input_text)
+            with open(path, encoding="utf-8") as f:
+                content = f.read()
+        except FileNotFoundError:
+            click.echo(f"Error: File '{input_text}' not found.", err=True)
+            return
+        except Exception as e:
+            click.echo(f"Error reading file: {e}", err=True)
+            return
+    else:
+        content = input_text
 
     summary = app.summarize(content)
     click.echo("\nSummary:")

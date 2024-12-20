@@ -15,7 +15,7 @@ class BaseApp:
         self.splitter = SplitterService()
         self.embedder: EmbeddingService | None = None
 
-    async def init(self) -> None:
+    async def init_base(self) -> None:
         """Initialize the app"""
         self.logger.debug(f"Initializing BaseApp `{self.name}` ...")
         self.embedder = EmbeddingService()

@@ -4,7 +4,7 @@ import pytest
 
 from insightvault.models.document import Document
 from insightvault.services.splitter import SplitterService
-from tests.unit.services import BaseTest
+from tests.unit import BaseTest
 
 
 class TestSplitterService(BaseTest):

@@ -115,7 +115,7 @@ class TestCLI:
 
     def test_search_query(self, runner, mock_search_app):
         """Test search query through CLI"""
-        result = runner.invoke(cli, ["search", "query", "test query"])
+        result = runner.invoke(cli, ["search", "test query"])
 
         assert result.exit_code == 0
         mock_search_app.return_value.query.assert_called_once_with("test query")
@@ -126,14 +126,14 @@ class TestCLI:
         """Test search query with no results"""
         mock_search_app.return_value.query.return_value = []
 
-        result = runner.invoke(cli, ["search", "query", "test query"])
+        result = runner.invoke(cli, ["search", "test query"])
 
         assert result.exit_code == 0
         assert "No results found." in result.output
 
     def test_chat_query(self, runner, mock_rag_app):
         """Test chat query through CLI"""
-        result = runner.invoke(cli, ["chat", "query", "test question"])
+        result = runner.invoke(cli, ["chat", "test question"])
 
         assert result.exit_code == 0
         mock_rag_app.return_value.query.assert_called_once_with("test question")
@@ -141,7 +141,7 @@ class TestCLI:
 
     def test_summarize_text(self, runner, mock_summarizer_app):
         """Test text summarization through CLI"""
-        result = runner.invoke(cli, ["summarize", "text", "Text to summarize"])
+        result = runner.invoke(cli, ["summarize", "Text to summarize"])
 
         assert result.exit_code == 0
         mock_summarizer_app.return_value.summarize.assert_called_once_with(
@@ -154,7 +154,7 @@ class TestCLI:
         test_file = tmp_path / "test.txt"
         test_file.write_text("Content to summarize")
 
-        result = runner.invoke(cli, ["summarize", "file", str(test_file)])
+        result = runner.invoke(cli, ["summarize", "--file", str(test_file)])
 
         assert result.exit_code == 0
         mock_summarizer_app.return_value.summarize.assert_called_once_with(
