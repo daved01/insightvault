@@ -33,6 +33,9 @@ class BaseApp:
         """Async version of add_document"""
         self.logger.debug("Async adding document(s)")
 
+        if not self.embedder:
+            raise RuntimeError("Embedding service is not loaded!")
+
         processed_documents = []
         for doc in documents:
             # Split document into chunks
@@ -43,7 +46,7 @@ class BaseApp:
             embeddings = self.embedder.embed(chunk_contents)
 
             # Add embeddings to chunks
-            for chunk, embedding in zip(chunks, embeddings, strict=True):
+            for chunk, embedding in zip(chunks, embeddings, strict=True):  # type: ignore
                 chunk.embedding = embedding
                 processed_documents.append(chunk)
 

@@ -28,6 +28,8 @@ class SearchApp(BaseApp):
         """Async version of query"""
         self.logger.debug(f"Async querying the database for: {query}")
         await self.init_base()
+        if not self.embedder:
+            raise RuntimeError("Embedding service is not loaded!")
         query_embeddings: list[list[float]] = await self.embedder.embed([query])
         response: list[Document] = await self.db.query(query_embeddings[0])
         return sorted(set(doc.title for doc in response))

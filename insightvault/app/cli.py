@@ -100,14 +100,14 @@ def search_documents(query_text: str) -> None:
 def chat_search_documents(query_text: str) -> None:
     """Search documents in the database and return a chat response"""
     app = RAGApp(name="insightvault.rag")
-    results: str = app.query(query_text)
+    results: list[str] = app.query(query_text)
 
     if not results:
         click.echo("No results found.")
         return
 
     click.echo("\nChat response:")
-    click.echo(results)
+    click.echo(results[0])
 
 
 @cli.command(name="summarize")

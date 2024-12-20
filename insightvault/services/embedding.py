@@ -39,7 +39,7 @@ class EmbeddingService:
             await self.loading_task
 
         # Better safe than sorry (and for mypy)
-        if self.client is None:
+        if not self.client:
             raise RuntimeError("Client is not loaded!")
         return self.client
 

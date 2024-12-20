@@ -16,14 +16,14 @@ class SummarizerApp(BaseApp):
         self.llm = OllamaLLMService()
         self.prompt_service = PromptService()
 
-    def summarize(self, text: str) -> str:
+    def summarize(self, text: str) -> str | None:
         """Summarize a list of documents"""
         self.logger.info("Summarizing document(s)")
         return asyncio.get_event_loop().run_until_complete(
             self.async_summarize(text=text)
         )
 
-    async def async_summarize(self, text: str) -> str:
+    async def async_summarize(self, text: str) -> str | None:
         """Async version of summarize"""
         self.logger.info("Async summarizing document(s)")
 
