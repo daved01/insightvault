@@ -6,7 +6,7 @@ from insightvault.app.base import BaseApp
 from insightvault.models.document import Document
 
 
-class TestBaseApp:
+class BaseAppFixtures:
     @pytest.fixture(autouse=True)
     def mock_dependencies(self):
         """Mock all external dependencies"""
@@ -16,8 +16,13 @@ class TestBaseApp:
             # Configure the mock embedding service
             instance = mock_embedding_service.return_value
             instance.embed = AsyncMock(return_value=[[0.1, 0.2], [0.3, 0.4]])
-            instance.get_model = AsyncMock()
+            instance.get_client = AsyncMock()
             yield mock_embedding_service
+
+    @pytest.fixture
+    def mock_embedding_service(self, mock_dependencies):
+        """Create a mock embedding service"""
+        return mock_dependencies.return_value
 
     @pytest.fixture
     def mock_db_service(self):
@@ -62,6 +67,8 @@ class TestBaseApp:
             title="Test Doc", content="Test content", metadata={"source": "test"}
         )
 
+
+class TestBaseApp(BaseAppFixtures):
     @pytest.mark.asyncio
     async def test_add_documents_processes_correctly(
         self,
