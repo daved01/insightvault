@@ -4,14 +4,15 @@ dynamic = ["version"]
 description = "Local RAG pipeline runner"
 authors = [{ name = "David Kirchhoff" }]
 dependencies = [
-    "chromadb>=0.4.22",
-    "llama-cpp-python>=0.2.39",
-    "sentence-transformers>=2.5.1",
     "click>=8.1.7",
-    "pydantic>=2.6.1",
+    "chromadb>=0.4.22",
     "fastapi>=0.109.2",
-    "uvicorn>=0.27.1",
+    "llama-index>=0.12.5",
+    "ollama>=0.4.4",
+    "pydantic>=2.6.1",
     "python-multipart>=0.0.9",
+    "sentence-transformers>=2.5.1",
+    "uvicorn>=0.27.1",
 ]
 requires-python = ">=3.9"
 readme = "README.md"
@@ -21,6 +22,7 @@ license = {file = "LICENSE"}
 dev = [
     "ruff>=0.2.1",
     "mypy>=1.8.0",
+    "pre_commit>=4.0.1",
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.5",
 ]
@@ -32,9 +34,18 @@ build-backend = "hatchling.build"
 [tool.ruff]
 line-length = 88
 target-version = "py312"
+include = ["*.py", "**/*.py"]
+exclude = [
+    "build/**/*",
+    "dist/**/*",
+    "venv/**/*",
+    ".git/**/*",
+    "__pycache__/**/*"
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "B", "I", "N", "UP", "PL", "RUF"]
+fixable = ["E", "F", "I", "W"]
 
 [tool.mypy]
 python_version = "3.12"
@@ -47,4 +58,4 @@ disallow_untyped_defs = true
 insightvault = "run:main"
 
 [tool.hatch.version]
-path = "src/insightvault/__init__.py"
+path = "insightvault/__init__.py"

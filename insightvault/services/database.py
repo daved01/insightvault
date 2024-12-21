@@ -1,9 +1,14 @@
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
+from typing import Any
 
 import chromadb
 from chromadb.config import Settings
 
-from ..constants import COSINE_SIMILARITY_METADATA, DEFAULT_COLLECTION_NAME
+from ..constants import (
+    DEFAULT_COLLECTION_NAME,
+)
+from ..models.database import DistanceFunction
 from ..models.document import Document
 from ..utils.logging import get_logger
 
@@ -12,8 +17,8 @@ class AbstractDatabaseService(ABC):
     """Abstract database service"""
 
     @abstractmethod
-    async def init(self) -> None:
-        """Initialize the database"""
+    def _get_db_value(self, distance: DistanceFunction) -> str:
+        """Returns the database-specific string for the given distance function."""
         pass
 
     @abstractmethod
@@ -22,12 +27,18 @@ class AbstractDatabaseService(ABC):
         pass
 
     @abstractmethod
-    async def query(self, query_embedding: list[float]) -> list[Document]:
+    async def query(
+        self,
+        query_embedding: Sequence[float],
+        collection_name: str = DEFAULT_COLLECTION_NAME,
+        filter_docs: bool = True,
+        k: int = 8,
+    ) -> list[Document]:
         """Query the database for documents similar to the query embedding"""
         pass
 
     @abstractmethod
-    async def get_documents(self) -> list[Document]:
+    async def get_documents(self) -> list[Document] | None:
         """Get all documents from the database"""
         pass
 
@@ -51,73 +62,70 @@ class ChromaDatabaseService(AbstractDatabaseService):
     ):
         self.logger = get_logger("insightvault.services.database")
         self.persist_directory = persist_directory
-        self.client = None
-
-    async def init(self) -> None:
-        """Initialize the database"""
-
-        # TODO: Factor this out into a provider
         self.client = chromadb.PersistentClient(
             path=self.persist_directory,
             settings=Settings(anonymized_telemetry=False, allow_reset=True),
         )
+        self.similarity_function = self._get_db_value(DistanceFunction.COSINE)
+        self.threshold = 0.9
         self.logger.debug("Database initialized")
 
     async def add_documents(
-        self, documents: list[Document], collection: str = DEFAULT_COLLECTION_NAME
+        self, documents: list[Document], collection_name: str = DEFAULT_COLLECTION_NAME
     ) -> None:
-        """Add a list of documents to the database. The documents must have embeddings."""
-        if not self.client:
-            await self.init()
+        """Add a list of documents to the database. The documents must have
+        embeddings.
+        """
+        if not documents:
+            self.logger.warning("No documents to add to the database")
 
-        # Get or create collection
         collection = self.client.get_or_create_collection(
-            name=collection, metadata=COSINE_SIMILARITY_METADATA
+            name=collection_name, metadata={"hnsw:space": self.similarity_function}
         )
 
-        # Add the documents
-        # TODO: Factor this out into a provider
         collection.add(
+            ids=[doc.id for doc in documents],
             documents=[doc.content for doc in documents],
             metadatas=[doc.metadata for doc in documents],
-            embeddings=[doc.embedding for doc in documents],
-            ids=[doc.id for doc in documents],
+            embeddings=[doc.embedding for doc in documents],  # type: ignore
         )
         self.logger.debug(f"Added {len(documents)} documents to the database")
 
     async def query(
         self,
-        query_embedding: list[float],
-        collection: str = DEFAULT_COLLECTION_NAME,
-        k: int = 10,
-    ) -> list[Document] | None:
+        query_embedding: Sequence[float],
+        collection_name: str = DEFAULT_COLLECTION_NAME,
+        filter_docs: bool = True,
+        k: int = 8,
+    ) -> list[Document]:
         """Query the database for documents similar to the query embedding"""
-        if not self.client:
-            await self.init()
 
-        # Get collection
         try:
-            collection = self.client.get_collection(name=collection)
+            collection = self.client.get_collection(name=collection_name)
         except Exception as e:
             self.logger.error(f"Error getting collection: {e}")
             return []
 
-        # Query the collection
         results = collection.query(
             query_embeddings=[query_embedding],
+            include=["documents", "metadatas", "distances"],  # type: ignore[list-item]
             n_results=k,
         )
 
-        # Convert results to Document objects
+        # Filter the documents based on the distance
+        if filter_docs:
+            self.logger.debug(f"Filtering documents with threshold: {self.threshold}")
+            results = self._filter_docs(results=results, threshold=self.threshold)
+
         documents = []
         if results and results["documents"]:
             for i, content in enumerate(results["documents"][0]):
-                metadata = results["metadatas"][0][i]
+                metadata = results["metadatas"][0][i]  # type: ignore
                 doc_id = results["ids"][0][i]
                 documents.append(
                     Document(
                         id=doc_id,
-                        title=metadata.get("title", "Unknown"),
+                        title=str(metadata.get("title", "Unknown")),
                         content=content,
                         metadata=metadata,
                     )
@@ -127,47 +135,79 @@ class ChromaDatabaseService(AbstractDatabaseService):
         return documents
 
     async def get_documents(
-        self, collection: str = DEFAULT_COLLECTION_NAME
+        self, collection_name: str = DEFAULT_COLLECTION_NAME
     ) -> list[Document] | None:
         """List all documents in the database"""
-        if not self.client:
-            await self.init()
 
-        # Get collection
         try:
-            collection = self.client.get_collection(name=collection)
+            collection = self.client.get_collection(name=collection_name)
         except Exception as e:
             self.logger.error(f"Error getting collection: {e}")
             return []
 
-        # List the documents
         response = collection.get()
 
         documents = []
         response_ids = response.get("ids")
         response_contents = response.get("documents")
         response_metadatas = response.get("metadatas")
-        for doc_id, content, metadata in zip(
-            response_ids, response_contents, response_metadatas, strict=False
-        ):
-            documents.append(
-                Document(
-                    id=doc_id,
-                    title=metadata.get("title", "Unknown"),
-                    content=content,
-                    metadata=metadata,
+
+        if response_ids and response_contents and response_metadatas:
+            for doc_id, content, metadata in zip(
+                response_ids, response_contents, response_metadatas, strict=False
+            ):
+                documents.append(
+                    Document(
+                        id=doc_id,
+                        title=str(metadata.get("title", "Unknown")),
+                        content=content,
+                        metadata=metadata,
+                    )
                 )
-            )
 
         self.logger.debug(f"Found {len(documents)} documents in the database")
         return documents
 
     async def delete_all_documents(
-        self, collection: str = DEFAULT_COLLECTION_NAME
+        self, collection_name: str = DEFAULT_COLLECTION_NAME
     ) -> None:
         """Delete all documents in the database"""
-        if not self.client:
-            await self.init()
 
-        self.client.delete_collection(name=collection)
+        self.client.delete_collection(name=collection_name)
         self.logger.debug("Deleted all documents in the database")
+
+    def _filter_docs(self, results: Any, threshold: float = 0.9) -> Any:
+        """Filter the documents based on the distance"""
+        ids_to_keep = []
+        embeddings_to_keep = []
+        documents_to_keep = []
+        data_to_keep = []
+        metadatas_to_keep = []
+
+        # We don't need the distances after filtering
+        for i in range(len(results["documents"][0])):
+            if results["distances"][0][i] < threshold:
+                continue
+            documents_to_keep.append(results["documents"][0][i])
+            embeddings_to_keep.append(results["embeddings"][0][i]) if results[
+                "embeddings"
+            ] else None
+            metadatas_to_keep.append(results["metadatas"][0][i]) if results[
+                "metadatas"
+            ] else None
+            ids_to_keep.append(results["ids"][0][i]) if results["ids"] else None
+            data_to_keep.append(results["data"][0][i]) if results["data"] else None
+
+        return {
+            "ids": [ids_to_keep],
+            "documents": [documents_to_keep],
+            "metadatas": [metadatas_to_keep],
+            "embeddings": [embeddings_to_keep],
+            "data": [data_to_keep],
+        }
+
+    def _get_db_value(self, distance: DistanceFunction) -> str:
+        if distance == DistanceFunction.COSINE:
+            return "cosine"
+        elif distance == DistanceFunction.L2:
+            return "l2"

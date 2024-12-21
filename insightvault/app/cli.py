@@ -1,4 +1,3 @@
-import uuid
 from pathlib import Path
 
 import click
@@ -6,6 +5,7 @@ import click
 from insightvault import __version__
 
 from ..models.document import Document
+from .base import BaseApp
 from .rag import RAGApp
 from .search import SearchApp
 from .summarizer import SummarizerApp
@@ -18,16 +18,22 @@ def cli() -> None:
     pass
 
 
-def _add_document_to_app(filepath: str, app_name: str, app_class: type) -> None:
-    """Helper function to add a document to an app"""
-    app = app_class(name=app_name)
+@cli.group()
+def manage() -> None:
+    """Manage documents in the databases"""
+    pass
 
-    # Read file content
+
+@manage.command(name="add-file")
+@click.argument("filepath", type=click.Path(exists=True))
+def manage_add_file(filepath: str) -> None:
+    """Add a document from a file to the specified database"""
+    app = BaseApp(name="insightvault.base")
+
     path = Path(filepath)
     with open(path, encoding="utf-8") as f:
         content = f.read()
 
-    # Create and add document
     doc = Document(
         title=path.name,
         content=content,
@@ -37,9 +43,11 @@ def _add_document_to_app(filepath: str, app_name: str, app_class: type) -> None:
     app.add_documents([doc])
 
 
-def _add_text_to_app(text: str, app_name: str, app_class: type) -> None:
-    """Helper function to add text to an app"""
-    app = app_class(name=app_name)
+@manage.command(name="add-text")
+@click.argument("text")
+def manage_add_text(text: str) -> None:
+    """Add text to the specified database"""
+    app = BaseApp(name="insightvault.base")
     doc = Document(
         title="Direct Input",
         content=text,
@@ -48,10 +56,11 @@ def _add_text_to_app(text: str, app_name: str, app_class: type) -> None:
     app.add_documents([doc])
 
 
-def _list_documents_with_app(app_name: str, app_class: type) -> None:
-    """Helper function to list document titles using an app"""
-    app = app_class(name=app_name)
-    documents: list[Document] = app.list_documents()
+@manage.command(name="list")
+def manage_list_documents() -> None:
+    """List all documents in the specified database"""
+    app = BaseApp(name="insightvault.base")
+    documents: list[Document] | None = app.list_documents()
 
     if not documents:
         click.echo("No documents found in database.")
@@ -62,36 +71,17 @@ def _list_documents_with_app(app_name: str, app_class: type) -> None:
         click.echo(f"{i}. {doc.metadata.get('title', 'Untitled')} (ID: {doc.id})")
 
 
-def _delete_all_documents_with_app(app_name: str, app_class: type) -> None:
-    """Helper function to delete all documents using an app"""
-    app = app_class(name=app_name)
+@manage.command(name="delete-all")
+def manage_delete_all() -> None:
+    """Delete all documents from the specified database"""
+    app = BaseApp(name="insightvault.base")
     app.delete_all_documents()
     click.echo("All documents deleted from the database!")
 
 
-@cli.group()
-def search() -> None:
-    """Search operations using the database"""
-    pass
-
-
-@search.command(name="add-file")
-@click.argument("filepath", type=click.Path(exists=True))
-def search_add_document(filepath: str) -> None:
-    """Add a document in the filepath to the search database"""
-    _add_document_to_app(filepath, "insightvault.search", SearchApp)
-
-
-@search.command(name="add-text")
-@click.argument("text")
-def search_add_text(text: str) -> None:
-    """Add a text to the search database"""
-    _add_text_to_app(text, "insightvault.search", SearchApp)
-
-
-@search.command(name="query")
+@cli.command(name="search")
 @click.argument("query_text")
-def search_search_documents(query_text: str) -> None:
+def search_documents(query_text: str) -> None:
     """Search documents in the database"""
     app = SearchApp(name="insightvault.search")
     results: list[str] = app.query(query_text)
@@ -105,110 +95,47 @@ def search_search_documents(query_text: str) -> None:
         click.echo(f"{i}. {result}")
 
 
-@search.command(name="list")
-def search_list_documents() -> None:
-    """List all documents in the search database"""
-    _list_documents_with_app("insightvault.search", SearchApp)
-
-
-@search.command("delete-all")
-def search_delete_all():
-    """Delete all documents from the search database"""
-    _delete_all_documents_with_app("search", SearchApp)
-
-
-@cli.group()
-def chat() -> None:
-    """Chat operations using the database"""
-    pass
-
-
-@chat.command(name="add-file")
-@click.argument("filepath", type=click.Path(exists=True))
-def chat_add_document(filepath: str) -> None:
-    """Add a document in the filepath to the RAG database"""
-    _add_document_to_app(filepath, "insightvault.rag", RAGApp)
-
-
-@chat.command(name="add-text")
-@click.argument("text")
-def chat_add_text(text: str) -> None:
-    """Add a text to the RAG database"""
-    _add_text_to_app(text, "insightvault.rag", RAGApp)
-
-
-@chat.command(name="query")
+@cli.command(name="chat")
 @click.argument("query_text")
 def chat_search_documents(query_text: str) -> None:
     """Search documents in the database and return a chat response"""
     app = RAGApp(name="insightvault.rag")
-    results: str = app.query(query_text)
+    results: list[str] = app.query(query_text)
 
     if not results:
         click.echo("No results found.")
         return
 
     click.echo("\nChat response:")
-    # TODO: Implement chat response
-    click.echo(results)
+    click.echo(results[0])
 
 
-@chat.command(name="list")
-def chat_list_documents() -> None:
-    """List all documents in the RAG database"""
-    _list_documents_with_app("insightvault.rag", RAGApp)
+@cli.command(name="summarize")
+@click.argument("input_text")
+@click.option("--file", "-f", is_flag=True, help="Treat input as a file path")
+def summarize(input_text: str, file: bool = False) -> None:
+    """Summarize text or file content
 
-
-@chat.command("delete-all")
-def chat_delete_all():
-    """Delete all documents from the RAG database"""
-    _delete_all_documents_with_app("rag", RAGApp)
-
-
-@cli.group()
-def summarize() -> None:
-    """Summarization operations"""
-    pass
-
-
-@summarize.command(name="text")
-@click.argument("text")
-def summarize_text(text: str) -> None:
-    """Summarize the provided text"""
+    If --file flag is used, input_text is treated as a file path.
+    Otherwise, input_text is treated as the text to summarize.
+    """
     app = SummarizerApp(name="insightvault.summarizer")
 
-    # Create a temporary document for summarization
-    doc = Document(
-        id=str(uuid.uuid4()),
-        content=text,
-        title="Direct Input",
-        metadata={"type": "direct_input"},
-    )
+    if file:
+        try:
+            path = Path(input_text)
+            with open(path, encoding="utf-8") as f:
+                content = f.read()
+        except FileNotFoundError:
+            click.echo(f"Error: File '{input_text}' not found.", err=True)
+            return
+        except Exception as e:
+            click.echo(f"Error reading file: {e}", err=True)
+            return
+    else:
+        content = input_text
 
-    summary = app.summarize([doc])
-    click.echo("\nSummary:")
-    click.echo(summary)
-
-
-@summarize.command(name="file")
-@click.argument("filepath", type=click.Path(exists=True))
-def summarize_file(filepath: str) -> None:
-    """Summarize the content of a file"""
-    app = SummarizerApp(name="insightvault.summarizer")
-
-    # Read file content
-    path = Path(filepath)
-    with open(path, encoding="utf-8") as f:
-        content = f.read()
-
-    # Create document for summarization
-    doc = Document(
-        id=str(uuid.uuid4()),
-        content=content,
-        metadata={"title": path.name, "source": str(path)},
-    )
-
-    summary = app.summarize([doc])
+    summary = app.summarize(content)
     click.echo("\nSummary:")
     click.echo(summary)
 

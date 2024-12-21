@@ -1,0 +1,2 @@
+class TestRAGApp:
+    pass

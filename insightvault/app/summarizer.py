@@ -1,6 +1,7 @@
 import asyncio
 
-from ..models.document import Document
+from ..services.llm import OllamaLLMService
+from ..services.prompt import PromptService
 from .base import BaseApp
 
 
@@ -12,15 +13,23 @@ class SummarizerApp(BaseApp):
 
     def __init__(self, name: str = "insightvault") -> None:
         super().__init__(name)
+        self.llm = OllamaLLMService()
+        self.prompt_service = PromptService()
 
-    def summarize(self, documents: list[Document]) -> str:
+    def summarize(self, text: str) -> str | None:
         """Summarize a list of documents"""
         self.logger.info("Summarizing document(s)")
         return asyncio.get_event_loop().run_until_complete(
-            self.async_summarize(documents)
+            self.async_summarize(text=text)
         )
 
-    async def async_summarize(self, documents: list[Document]) -> str:
+    async def async_summarize(self, text: str) -> str | None:
         """Async version of summarize"""
         self.logger.info("Async summarizing document(s)")
-        return "\n".join([doc.content for doc in documents])
+
+        prompt = self.prompt_service.get_prompt(
+            prompt_type="summarize_text", context={"text": text}
+        )
+
+        response = await self.llm.query(prompt=prompt)
+        return response
