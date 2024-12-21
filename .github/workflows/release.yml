@@ -2,7 +2,7 @@ name: Create Release
 
 on:
   workflow_run:
-    workflows: ["Quality Checks"]
+    workflows: ["Quality Checks on Main"]
     types:
       - completed
 
