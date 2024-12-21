@@ -21,6 +21,10 @@ jobs:
         with:
             python-version: 3.12
 
+      - name: Install the project
+        run: |
+            pip install -e .
+
       - name: Run version check
         run: |
             current_version=$(python -c "from insightvault import __version__; print(__version__)")
@@ -29,10 +33,6 @@ jobs:
             echo "Version has not been bumped yet"
             exit 1
             fi
-
-      - name: Install the project
-        run: |
-            pip install -e .
 
       - name: Install dependencies
         run: |
