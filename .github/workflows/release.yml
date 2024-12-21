@@ -46,10 +46,10 @@ jobs:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: docs/build/html
 
-    #   - name: Create new version tag
-    #     run: |
-    #       git tag v$current_version
-    #       git push origin v$current_version
+      - name: Create new version tag
+        run: |
+          git tag v$current_version
+          git push origin v$current_version
 
       - name: Build the package and upload to Test PyPI
         env:
