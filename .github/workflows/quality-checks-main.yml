@@ -40,7 +40,7 @@ jobs:
 
       - name: Run Ruff linting
         run: |
-          ruff check insightvault tests
+          ruff check .
 
       - name: Run MyPy type checking
         run: |
