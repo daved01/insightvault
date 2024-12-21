@@ -21,6 +21,15 @@ jobs:
         with:
             python-version: 3.12
 
+      - name: Run version check
+        run: |
+            current_version=$(python -c "from insightvault import __version__; print(__version__)")
+            latest_tag=$(git describe --tags --abbrev=0 | sed 's/^v//')
+            if [[ "$current_version" == "$latest_tag" ]]; then
+            echo "Version has not been bumped yet"
+            exit 1
+            fi
+
       - name: Install the project
         run: |
             pip install -e .
@@ -29,15 +38,6 @@ jobs:
         run: |
             pip install -r docs/requirements.txt
             pip install bumpversion twine
-
-      - name: Run version check
-        run: |
-          current_version=$(python -c "from insightvault import __version__; print(__version__)")
-          latest_tag=$(git describe --tags --abbrev=0)
-          if [[ "$current_version" == "$latest_tag" ]]; then
-            echo "Version has not been bumped yet"
-            exit 1
-          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
