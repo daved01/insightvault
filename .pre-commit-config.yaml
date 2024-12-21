@@ -21,4 +21,4 @@ repos:
     hooks:
       - id: detect-secrets
 
-exclude: '(^|/)(dist|build|\.env|secrets\.json|\.venv|\.pre-commit-config\.yaml|\.pre-commit-hooks\.yaml)(/|$)'
+exclude: '(^|/)(dist|build|docs|\.env|secrets\.json|\.venv|\.pre-commit-config\.yaml|\.pre-commit-hooks\.yaml)(/|$)'

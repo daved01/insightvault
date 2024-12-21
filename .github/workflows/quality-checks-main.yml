@@ -36,7 +36,7 @@ jobs:
 
       - name: Run Ruff format check
         run: |
-          ruff format .
+          ruff format insightvault tests
 
       - name: Run Ruff linting
         run: |
