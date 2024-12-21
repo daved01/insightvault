@@ -6,11 +6,34 @@
 InsightVault documentation
 ==========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+InsightVault is a framework for building AI applications that run locally.
 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Getting started
+
+   contents/getting_started
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Usage guide
+
+   contents/configuration
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Developer guide
+
+   contents/develop
+   contents/api/insightvault
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
