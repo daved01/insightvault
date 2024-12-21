@@ -33,10 +33,10 @@ jobs:
           pip install .[dev]
 
     - name: Run Ruff formatting
-      run: ruff format .
+      run: ruff format insightvault tests
 
     - name: Run Ruff linting with fix
-      run: ruff check . --fix
+      run: ruff check insightvault tests --fix
 
     - name: Run Mypy (type checking)
       run: mypy insightvault

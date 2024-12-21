@@ -36,11 +36,11 @@ jobs:
 
       - name: Run Ruff format check
         run: |
-          ruff format .
+          ruff format insightvault tests
 
       - name: Run Ruff linting
         run: |
-          ruff check .
+          ruff check insightvault tests
 
       - name: Run MyPy type checking
         run: |
