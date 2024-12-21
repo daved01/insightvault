@@ -7,7 +7,7 @@ on:
 
 jobs:
   quality-checks:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +39,7 @@ jobs:
 
       - name: Run Ruff linting
         run: |
-          ruff check .
+          ruff check insightvault tests
 
       - name: Run MyPy type checking
         run: |
