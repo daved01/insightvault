@@ -17,44 +17,41 @@ class RAGApp(SearchApp):
     def __init__(self, name: str = "insightvault.app.rag") -> None:
         super().__init__(name)
         self.prompt_service = PromptService()
-        self.llm: OllamaLLMService | None = None
+        self.llm_service = OllamaLLMService()
 
-    async def _init_rag(self) -> None:
-        """Initialize the RAG part of the application"""
-        self.logger.debug("Initializing RAG application")
-        self.llm = OllamaLLMService()
-        if not self.llm:
-            raise RuntimeError("LLM service is not loaded!")
-        await self.llm.get_client()
-        self.logger.debug("RAG application initialized")
-
-    async def init_rag(self) -> None:
-        """Initialize the RAG application"""
-        # TODO: This should be done with asyncio.gather
-        await self.init_base()
-        await self._init_rag()
+    async def init(self) -> None:
+        """Initialize the RAG app"""
+        # TODO: Use asyncio.gather() here, make it work with asyncio.run()
+        # asyncio.gather(
+        #     super().init(),
+        #     self.llm_service.init(),
+        # )
+        await self.llm_service.init()
+        await super().init()
+        self.logger.debug(f"RAGApp `{self.name}` initialized!")
 
     def query(self, query: str) -> list[str]:
         """Query the database for documents similar to the query
 
         This RAG-specific implementation returns Document objects instead of strings.
         """
-        self.logger.debug(f"RAG querying the database for: {query}")
-        return asyncio.get_event_loop().run_until_complete(self.async_query(query))
+        return asyncio.run(self.async_query(query))
 
     async def async_query(self, query: str) -> list[str]:
-        """Async version of query
+        """Async version of query"""
+        self.logger.debug(f"RAG async querying the database for: `{query}` ...")
 
-        This RAG-specific implementation returns Document objects instead of strings.
-        """
-        self.logger.debug(f"RAG async querying the database for: {query}")
-        await self.init_rag()
-        if not self.embedder:
+        if not self.splitter_service:
+            raise RuntimeError("Splitter service is not loaded!")
+        if not self.embedder_service:
             raise RuntimeError("Embedding service is not loaded!")
-        if not self.db:
+        if not self.db_service:
             raise RuntimeError("Database service is not loaded!")
-        query_embeddings: list[list[float]] = await self.embedder.embed([query])
-        query_response: list[Document] | None = await self.db.query(query_embeddings[0])
+
+        query_embeddings: list[list[float]] = await self.embedder_service.embed([query])
+        query_response: list[Document] | None = await self.db_service.query(
+            query_embeddings[0]
+        )
 
         # Create context from the response
         if not query_response:
@@ -67,10 +64,7 @@ class RAGApp(SearchApp):
             prompt_type="rag_context", context={"question": query, "context": context}
         )
 
-        # Query the LLM
-        if not self.llm:
-            raise RuntimeError("LLM service is not loaded!")
-        response = await self.llm.query(prompt=prompt)
+        response = await self.llm_service.query(prompt=prompt)
         if not response:
             return ["No response from the LLM."]
         return [response]

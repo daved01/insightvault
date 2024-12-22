@@ -17,14 +17,8 @@ class AbstractDatabaseService(ABC):
     """Abstract database service"""
 
     @abstractmethod
-    def _get_db_value(self, distance: DistanceFunction) -> str:
-        """Returns the database-specific string for the given distance function."""
-        pass
-
-    @abstractmethod
     async def add_documents(self, documents: list[Document]) -> None:
         """Add a list of documents to the database"""
-        pass
 
     @abstractmethod
     async def query(
@@ -35,17 +29,18 @@ class AbstractDatabaseService(ABC):
         k: int = 8,
     ) -> list[Document]:
         """Query the database for documents similar to the query embedding"""
-        pass
 
     @abstractmethod
     async def get_documents(self) -> list[Document] | None:
         """Get all documents from the database"""
-        pass
 
     @abstractmethod
     async def delete_all_documents(self) -> None:
         """Delete all documents from the database"""
-        pass
+
+    @abstractmethod
+    def _get_db_value(self, distance: DistanceFunction) -> str:
+        """Returns the database-specific string for the given distance function."""
 
 
 class ChromaDatabaseService(AbstractDatabaseService):

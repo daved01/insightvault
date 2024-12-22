@@ -16,20 +16,24 @@ class SearchApp(BaseApp):
     def __init__(self, name: str = "insightvault.app.search") -> None:
         super().__init__(name)
 
+    async def init(self) -> None:
+        """Initialize the search app"""
+        await super().init()
+        self.logger.debug(f"SearchApp `{self.name}` initialized!")
+
     def query(self, query: str) -> list[str]:
         """Query the database for documents similar to the query.
 
         Returns an alphabetically sorted list of document titles.
         """
-        self.logger.debug(f"Querying the database for: {query}")
-        return asyncio.get_event_loop().run_until_complete(self.async_query(query))
+        return asyncio.run(self.async_query(query))
 
     async def async_query(self, query: str) -> list[str]:
         """Async version of query"""
-        self.logger.debug(f"Async querying the database for: {query}")
-        await self.init_base()
-        if not self.embedder:
+        self.logger.debug(f"Querying the database for: {query}")
+        await self.init()
+        if not self.embedder_service:
             raise RuntimeError("Embedding service is not loaded!")
-        query_embeddings: list[list[float]] = await self.embedder.embed([query])
-        response: list[Document] = await self.db.query(query_embeddings[0])
+        query_embeddings: list[list[float]] = await self.embedder_service.embed([query])
+        response: list[Document] = await self.db_service.query(query_embeddings[0])
         return sorted(set(doc.title for doc in response))

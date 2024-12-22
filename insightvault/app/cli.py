@@ -1,3 +1,4 @@
+import asyncio
 from pathlib import Path
 
 import click
@@ -29,6 +30,7 @@ def manage() -> None:
 def manage_add_file(filepath: str) -> None:
     """Add a document from a file to the specified database"""
     app = BaseApp(name="insightvault.base")
+    asyncio.run(app.init())
 
     path = Path(filepath)
     with open(path, encoding="utf-8") as f:
@@ -48,6 +50,7 @@ def manage_add_file(filepath: str) -> None:
 def manage_add_text(text: str) -> None:
     """Add text to the specified database"""
     app = BaseApp(name="insightvault.base")
+    asyncio.run(app.init())
     doc = Document(
         title="Direct Input",
         content=text,
@@ -84,6 +87,7 @@ def manage_delete_all() -> None:
 def search_documents(query_text: str) -> None:
     """Search documents in the database"""
     app = SearchApp(name="insightvault.search")
+    asyncio.run(app.init())
     results: list[str] = app.query(query_text)
 
     if not results:
@@ -100,6 +104,8 @@ def search_documents(query_text: str) -> None:
 def chat_search_documents(query_text: str) -> None:
     """Search documents in the database and return a chat response"""
     app = RAGApp(name="insightvault.rag")
+    asyncio.run(app.init())
+
     results: list[str] = app.query(query_text)
 
     if not results:
@@ -120,7 +126,7 @@ def summarize(input_text: str, file: bool = False) -> None:
     Otherwise, input_text is treated as the text to summarize.
     """
     app = SummarizerApp(name="insightvault.summarizer")
-
+    asyncio.run(app.init())
     if file:
         try:
             path = Path(input_text)

@@ -7,10 +7,21 @@ from ollama import AsyncClient, ChatResponse
 from ..utils.logging import get_logger
 
 
-class LLMService(ABC):
+class AbstractLLMService(ABC):
     @abstractmethod
-    def __init__(self) -> None:
-        """Initialize the LLM service"""
+    def __init__(self, model_name: str) -> None:
+        """
+        Configure the LLM service with the necessary settings.
+
+        Args:
+            model_name (str): The name of the model to use.
+        """
+
+    @abstractmethod
+    async def init(self) -> None:
+        """
+        Prepare the LLM service for use, such as loading model weights.
+        """
 
     @abstractmethod
     async def query(self, prompt: str) -> str | None:
@@ -21,44 +32,44 @@ class LLMService(ABC):
         """Generate a response from the model while maintaining chat history."""
 
     @abstractmethod
-    def clear_chat_history(self) -> None:
+    async def clear_chat_history(self) -> None:
         """Clear the chat history."""
 
 
-class OllamaLLMService(LLMService):
+class BaseLLMService(AbstractLLMService):
+    def __init__(self, model_name: str) -> None:
+        """
+        Configure base properties for the LLM service.
+
+        Args:
+            model_name (str): The name of the model to use.
+        """
+        self.logger: Logger = get_logger("insightvault.services.llm")
+        self.model_name: str = model_name
+        self.chat_history: list[dict[str, str]] = []
+
+
+class OllamaLLMService(BaseLLMService):
     """Ollama LLM service"""
 
     def __init__(self, model_name: str = "llama3") -> None:
-        self.logger: Logger = get_logger("insightvault.services.llm")
-        self.model_name = model_name
-        self.client: AsyncClient | None = None  # AsyncClient()
-        self.chat_history: list[dict[str, str]] = []
-        self.loading_task: asyncio.Task[None] = asyncio.create_task(self._load_model())
+        super().__init__(model_name)
+        self.client: AsyncClient | None = None
 
-    def clear_chat_history(self) -> None:
+    async def init(self) -> None:
+        """Initialize the LLM service"""
+        self.client = await asyncio.to_thread(AsyncClient)
+        self.logger.debug(f"LLM loaded `{self.model_name}`!")
+
+    async def clear_chat_history(self) -> None:
         """Clear the chat history."""
         self.chat_history = []
-
-    async def _load_model(self) -> None:
-        """Load the embedding model"""
-        self.logger.debug(f"Loading llm: {self.model_name}")
-        self.client = AsyncClient()
-        self.logger.debug("LLM loaded!")
-
-    async def get_client(self) -> AsyncClient:
-        if self.client is None:
-            self.logger.debug("LLM not loaded, waiting for loading task to complete")
-            await self.loading_task
-
-        # Better safe than sorry (and for mypy)
-        if self.client is None:
-            raise RuntimeError("Client is not loaded!")
-        return self.client
 
     async def query(self, prompt: str) -> str | None:
         """Generate a one-off response from the model without chat history."""
         if not self.client:
-            self.client = await self.get_client()
+            raise RuntimeError("LLM client is not loaded! Call `init()` first.")
+
         response: ChatResponse = await self.client.chat(
             model=self.model_name,
             messages=[
@@ -72,9 +83,11 @@ class OllamaLLMService(LLMService):
 
     async def chat(self, prompt: str) -> str | None:
         """Generate a response from the model while maintaining chat history."""
-        self.chat_history.append({"role": "user", "content": prompt})
         if not self.client:
-            self.client = await self.get_client()
+            raise RuntimeError("LLM client is not loaded! Call `init()` first.")
+
+        self.chat_history.append({"role": "user", "content": prompt})
+
         response: str | None = await self.query(prompt)
         if response is None:
             return "Error: No response from the model."

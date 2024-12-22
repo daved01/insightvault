@@ -23,25 +23,11 @@ class EmbeddingService:
         self.logger: Logger = get_logger("insightvault.services.embedding")
         self.model_name: str = model_name
         self.client: SentenceTransformer | None = None
-        self.loading_task: asyncio.Task[None] = asyncio.create_task(self._load_model())
 
-    async def _load_model(self) -> None:
-        """Load the embedding model"""
-        self.logger.debug(f"Loading embedding model: {self.model_name}")
-        self.client = SentenceTransformer(self.model_name)
-        self.logger.debug("Embedding model loaded!")
-
-    async def get_client(self) -> SentenceTransformer:
-        if self.client is None:
-            self.logger.debug(
-                "Embedding model not loaded, waiting for loading task to complete"
-            )
-            await self.loading_task
-
-        # Better safe than sorry (and for mypy)
-        if not self.client:
-            raise RuntimeError("Client is not loaded!")
-        return self.client
+    async def init(self) -> None:
+        """Initialize the embedding service"""
+        self.client = await asyncio.to_thread(SentenceTransformer, self.model_name)
+        self.logger.debug(f"Embedding model loaded `{self.model_name}`!")
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
         """Generate embeddings for a list of texts
@@ -54,8 +40,10 @@ class EmbeddingService:
         """
 
         self.logger.debug(f"Embedding {len(texts)} texts...")
+
         if not self.client:
-            self.client = await self.get_client()
+            raise RuntimeError("Embedding model is not loaded! Call `init()` first.")
+
         embeddings = self.client.encode(
             texts, batch_size=32, show_progress_bar=False, convert_to_numpy=True
         )
