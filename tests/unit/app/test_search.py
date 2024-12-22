@@ -4,10 +4,9 @@ import pytest
 
 from insightvault.app.search import SearchApp
 from insightvault.models.document import Document
-from tests.unit.app.test_base import BaseAppFixtures
 
 
-class TestSearchApp(BaseAppFixtures):
+class TestSearchApp:
     @pytest.fixture
     def search_app(
         self, mock_db_service, mock_splitter_service, mock_embedding_service

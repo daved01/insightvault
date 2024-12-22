@@ -3,10 +3,9 @@ from unittest.mock import AsyncMock, Mock, patch
 import pytest
 
 from insightvault.app.summarizer import SummarizerApp
-from tests.unit.app.test_base import BaseAppFixtures
 
 
-class TestSummarizerApp(BaseAppFixtures):
+class TestSummarizerApp:
     @pytest.fixture
     def mock_llm_service(self):
         """Create a mock LLM service"""
