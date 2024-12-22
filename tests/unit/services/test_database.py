@@ -29,29 +29,12 @@ class TestChromaDatabaseService(BaseTest):
     @pytest.fixture
     async def db_service(self, mock_client):
         """Create database service with mocked client"""
-        service = ChromaDatabaseService(persist_directory="test/db")
-        service.client = mock_client
-        return service
-
-    # @pytest.fixture
-    # def sample_documents(self):
-    #     """Create sample documents for testing"""
-    #     return [
-    #         Document(
-    #             id="1",
-    #             title="Doc 1",
-    #             content="Content 1",
-    #             metadata={"source": "test"},
-    #             embedding=[0.1, 0.2, 0.3],
-    #         ),
-    #         Document(
-    #             id="2",
-    #             title="Doc 2",
-    #             content="Content 2",
-    #             metadata={"source": "test"},
-    #             embedding=[0.4, 0.5, 0.6],
-    #         ),
-    #     ]
+        with patch(
+            "insightvault.services.database.chromadb.PersistentClient"
+        ) as mock_chroma:
+            mock_chroma.return_value = mock_client
+            service = ChromaDatabaseService(persist_directory="test/db")
+            return service
 
     @pytest.mark.asyncio
     @patch("insightvault.services.database.chromadb")

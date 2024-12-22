@@ -3,10 +3,10 @@ from unittest.mock import AsyncMock, Mock, patch
 import pytest
 
 from insightvault.app.summarizer import SummarizerApp
-from tests.unit.app.test_base import BaseAppFixtures
+from tests.unit.app.test_base import BaseAppTestSetup
 
 
-class TestSummarizerApp(BaseAppFixtures):
+class TestSummarizerApp(BaseAppTestSetup):
     @pytest.fixture
     def mock_llm_service(self):
         """Create a mock LLM service"""
@@ -60,18 +60,11 @@ class TestSummarizerApp(BaseAppFixtures):
         )
 
         # Verify LLM was called with prompt
-        summarizer_app.llm.query.assert_called_once_with(prompt="Generated prompt text")
+        summarizer_app.llm_service.query.assert_called_once_with(
+            prompt="Generated prompt text"
+        )
 
         assert result == "Summarized text"
-
-    def test_sync_summarize_calls_async_version(self, summarizer_app):
-        """Test that sync summarize method properly calls async version"""
-        with patch("asyncio.get_event_loop") as mock_loop:
-            mock_loop.return_value.run_until_complete = Mock()
-
-            summarizer_app.summarize("Test text")
-
-            mock_loop.return_value.run_until_complete.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_async_summarize_preserves_text(self, summarizer_app):
@@ -98,7 +91,7 @@ class TestSummarizerApp(BaseAppFixtures):
     @pytest.mark.asyncio
     async def test_async_summarize_handles_none_response(self, summarizer_app):
         """Test handling of None response from LLM"""
-        summarizer_app.llm.query.return_value = None
+        summarizer_app.llm_service.query.return_value = None
 
         result = await summarizer_app.async_summarize("Test text")
 

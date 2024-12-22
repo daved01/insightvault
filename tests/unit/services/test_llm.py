@@ -66,7 +66,7 @@ class TestOllamaLLMService:
             {"role": "assistant", "content": "response"},
         ]
 
-        service.clear_chat_history()
+        await service.clear_chat_history()
 
         assert len(service.chat_history) == 0
 

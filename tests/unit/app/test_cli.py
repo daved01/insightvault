@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 from click.testing import CliRunner
@@ -49,9 +49,11 @@ class TestCLI:
 
     def test_manage_add_file(self, runner, mock_base_app, tmp_path):
         """Test adding a file through CLI"""
-        # Create a temporary test file
         test_file = tmp_path / "test.txt"
         test_file.write_text("Test content")
+
+        mock_base_app.return_value.init = AsyncMock()
+        mock_base_app.return_value.add_documents = AsyncMock()
 
         result = runner.invoke(cli, ["manage", "add-file", str(test_file)])
 
@@ -64,6 +66,9 @@ class TestCLI:
 
     def test_manage_add_text(self, runner, mock_base_app):
         """Test adding text through CLI"""
+        mock_base_app.return_value.init = AsyncMock()
+        mock_base_app.return_value.add_documents = AsyncMock()
+
         result = runner.invoke(cli, ["manage", "add-text", "Test content"])
 
         assert result.exit_code == 0
@@ -115,6 +120,7 @@ class TestCLI:
 
     def test_search_query(self, runner, mock_search_app):
         """Test search query through CLI"""
+        mock_search_app.return_value.init = AsyncMock()
         result = runner.invoke(cli, ["search", "test query"])
 
         assert result.exit_code == 0
@@ -124,6 +130,7 @@ class TestCLI:
 
     def test_search_query_no_results(self, runner, mock_search_app):
         """Test search query with no results"""
+        mock_search_app.return_value.init = AsyncMock()
         mock_search_app.return_value.query.return_value = []
 
         result = runner.invoke(cli, ["search", "test query"])
@@ -133,6 +140,7 @@ class TestCLI:
 
     def test_chat_query(self, runner, mock_rag_app):
         """Test chat query through CLI"""
+        mock_rag_app.return_value.init = AsyncMock()
         result = runner.invoke(cli, ["chat", "test question"])
 
         assert result.exit_code == 0
@@ -141,6 +149,7 @@ class TestCLI:
 
     def test_summarize_text(self, runner, mock_summarizer_app):
         """Test text summarization through CLI"""
+        mock_summarizer_app.return_value.init = AsyncMock()
         result = runner.invoke(cli, ["summarize", "Text to summarize"])
 
         assert result.exit_code == 0
@@ -151,6 +160,7 @@ class TestCLI:
 
     def test_summarize_file(self, runner, mock_summarizer_app, tmp_path):
         """Test file summarization through CLI"""
+        mock_summarizer_app.return_value.init = AsyncMock()
         test_file = tmp_path / "test.txt"
         test_file.write_text("Content to summarize")
 
