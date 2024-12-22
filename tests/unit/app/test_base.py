@@ -6,7 +6,7 @@ from insightvault.app.base import BaseApp
 from insightvault.models.document import Document
 
 
-class TestBaseApp:
+class BaseAppTestSetup:
     @pytest.fixture
     def mock_embedding_service(self):
         """Create a mock embedding service"""
@@ -60,6 +60,8 @@ class TestBaseApp:
             title="Test Doc", content="Test content", metadata={"source": "test"}
         )
 
+
+class TestBaseApp(BaseAppTestSetup):
     @pytest.mark.asyncio
     async def test_init_initializes_services(self, base_app):
         """Test that init initializes all required services"""
