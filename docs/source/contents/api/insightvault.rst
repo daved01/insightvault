@@ -1,4 +1,4 @@
-insightvault package
+API reference
 ====================
 
 Subpackages
