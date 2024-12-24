@@ -3,57 +3,73 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-InsightVault documentation
+Introduction
 ==========================
 
-InsightVault is a framework for building AI applications that run locally.
+InsightVault is a framework for building AI applications that run locally, providing tools for semantic search, text summarization, and Retrieval-Augmented Generation (RAG)-based chat. 
 
-# TODO: Add better explanation of what the app is about
+With InsightVault, developers can easily create on-premise FastAPI services or similar interfaces to enable advanced natural language processing workflows. Whether you need to perform quick document searches, generate concise summaries, or interact through intelligent chat systems, InsightVault has you covered.
 
-
-
-To get started, run
+To get started, install the package using:
 
 .. code-block:: bash
 
    pip install insightvault
 
-Then you can use the three apps for your needs like this.
+**Using the SummarizerApp**
 
-The `SummarizerApp` is used to summarize text.
+The SummarizerApp simplifies text summarization:
+
 
 .. code-block:: python
 
    from insightvault import SummarizerApp
 
-   # Initialization
+   # Initialize the summarizer
    summarizer_app = SummarizerApp()
 
-   # Summarization (synchronous)
+   # Generate a summary
    summary = summarizer_app.summarize(text="This is a very long text...")
+   print(summary)
 
 
-The search and chat apps use a database we must populate first. This database is shared between the two apps.
+**Using the Search and Chat Apps**
+
+The SearchApp and ChatApp rely on a shared database. Populate the database before querying:
 
 .. code-block:: python
 
-   from insightvault import SearchApp, ChatApp
+   from insightvault import SearchApp, ChatApp, Document
 
-   # Initialize one or more apps
+   # Initialize the apps
    search_app = SearchApp()
    chat_app = ChatApp()
 
-   # Summarization (synchronous)
-   summary = summarizer_app.summarize(text="This is a very long text...")
+   # Add documents to the database (example)
+   documents = [
+      Document(
+         content= "The earth is flat.",
+         title="The Truth Teller",
+         metadata={"source": "the internet"}
+      )
+   ]
 
-   # Chat (synchronous)
+   search_app.add_documents(documents)
+
+   # Perform a search
+   search_results = search_app.query("What shape is the earth?")
+   print(search_results)
+
+   # Chat interaction
    chat_response = chat_app.query("Given what we have talked about before, why is the earth flat?")
+   print(chat_response)
 
 
-Note that all methods shown above also have an async method with an `async_` prefix.
+Note: All synchronous methods (e.g., summarize, search, query) have asynchronous counterparts with the prefix async_. For example, use async_summarize for asynchronous summarization.
 
-Before we can query our documents we have to add them to the database.
 
+Table of contents
+=========================
 
 .. toctree::
    :maxdepth: 2
@@ -76,7 +92,7 @@ Before we can query our documents we have to add them to the database.
    :caption: Developer guide
 
    contents/develop
-   contents/api/insightvault
+   contents/api/api_reference
 
 
 Indices and tables

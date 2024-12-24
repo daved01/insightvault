@@ -4,11 +4,13 @@
 Configuration
 *****************
 
-To begin development for the library, follow the instructions below to set up your environment.
+InsightVault provides a flexible configuration system through a YAML file, allowing you to customize key settings for the framework.
 
-# TODO: Add once we have a config file!
 
-You can configure the app with a config file ``config.yaml`` like this.
+Default Configuration
+===================================
+
+Below is an example configuration file, ``config.yaml``:
 
 
 .. code-block:: yaml
@@ -23,7 +25,11 @@ You can configure the app with a config file ``config.yaml`` like this.
     embedding:
         model: "all-MiniLM-L6-v2"
 
-Place this file into the root of your project. For example, if you are developing an app ``myapp``, place the ``config.yaml`` next to you where you are initializing the package, or provide the path to the config file.
+
+Setting Up the Configuration
+===================================
+
+Place the config.yaml file in the root of your project directory. For instance, if your project is called myapp, the directory structure should look like this:
 
 .. code-block:: bash
 
@@ -32,3 +38,12 @@ Place this file into the root of your project. For example, if you are developin
     ├── main.py
     ├── config.yaml
 
+Alternatively, you can specify a custom path to the configuration file when initializing the package.
+
+.. code-block:: python
+    from insightvault import SearchApp
+
+    # Specify the path to your configuration file
+    search_app = SearchApp(config_path="path/to/config.yaml")
+
+**Tip:** If no configuration file is provided, InsightVault will use default values.
