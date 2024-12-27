@@ -68,3 +68,11 @@ class RAGApp(SearchApp):
         if not response:
             return ["No response from the LLM."]
         return [response]
+
+    def clear(self) -> None:
+        """Clears the chat history"""
+        return asyncio.run(self.async_clear())
+
+    async def async_clear(self) -> None:
+        """Async version of clear"""
+        await self.llm_service.clear_chat_history()
