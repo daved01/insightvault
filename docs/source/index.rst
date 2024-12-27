@@ -65,7 +65,7 @@ The SearchApp and ChatApp rely on a shared database. Populate the database befor
    print(chat_response)
 
 
-Note: All synchronous methods (e.g., summarize, search, query) have asynchronous counterparts with the prefix async_. For example, use async_summarize for asynchronous summarization.
+Note: All synchronous methods (e.g., summarize, search, query) have asynchronous counterparts with the prefix ``async_``. For example, use ``async_summarize()`` for asynchronous summarization.
 
 
 Table of contents
@@ -92,7 +92,7 @@ Table of contents
    :caption: Developer guide
 
    contents/develop
-   contents/api/api_reference
+   contents/api_reference
 
 
 Indices and tables

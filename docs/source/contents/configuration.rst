@@ -15,6 +15,11 @@ Below is an example configuration file, ``config.yaml``:
 
 .. code-block:: yaml
 
+    database:
+        max_num_results: 8      # Number of docs returned from the db using ANN
+        result_threshold: 0.95  # Similarity threshold below which results are not returned
+        path: "./data/db"       # Path for the database
+
     splitter:
         chunk_size: 1024
         chunk_overlap: 256

@@ -4,7 +4,7 @@
 Development setup
 *****************
 
-This section provides instructions for setting up your environment to contribute to the `insightvault` library.  
+This section provides instructions for setting up your environment to contribute to the ``insightvault`` library.  
 
 
 Preparing Your Environment
@@ -30,7 +30,7 @@ Create and activate the virtual environment:
     source .venv/bin/activate  # On Linux/macOS
     .venv\Scripts\activate     # On Windows
 
-For more information on managing envirnoments with Pyenv and virtualenv, see my [post](https://deconvoluteai.com/blog/neuralception/pyenvvirtualenv).
+For more information on managing envirnoments with Pyenv and virtualenv, see my `post <https://deconvoluteai.com/blog/neuralception/pyenvvirtualenv>`_ .
 
 
 **3. Install the Package in Development Mode**
@@ -38,7 +38,7 @@ Install the library in editable mode along with the development dependencies:
 
 .. code-block:: bash
 
-    pip install -e ".[dev]"
+    pip install -e .[dev]
 
 This setup allows you to test changes to the codebase without reinstalling the package.
 
@@ -92,7 +92,7 @@ Run ruff to check for coding style violations:
     ruff check insightvault tests
 
 **Formatting:**
-Use black to format the codebase:
+Use ruff to format the codebase:
 
 .. code-block:: bash
 
@@ -124,8 +124,14 @@ Contributing
 ==============================================
 
 If you plan to contribute to the library, please:
+
 1. Create a new branch.
+
 2. Write tests for any new functionality or changes.
+
 3. Make sure all quality checks pass.
+
 4. If you introduce a new feature, update the documentation.
+
 5. Submit a pull request with a clear description of your changes.
+

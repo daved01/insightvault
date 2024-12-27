@@ -46,7 +46,7 @@ The ``SearchApp`` enables semantic search over your database. It returns a list 
     results = await search_app.async_query("Why is the sky blue?")
     print(results)
 
-**Tip:** Ensure you populate the database with your documents before performing a search. The methods add_documents and delete_documents allow you to manage the document database.
+**Tip:** Ensure you populate the database with your documents before performing a search. The methods ``add_documents()`` and ``delete_documents()`` allow you to manage the document database.
 
 
 Chat App
@@ -84,7 +84,7 @@ The ChatApp facilitates an interactive chat experience with your data. It mainta
     # Clear the chat history
     chat_app.clear()
 
-**Note:** Currently, clear() clears the entire chat history.
+**Note:** Currently, ``clear()`` clears the entire chat history.
 
 
 Summarizer App
@@ -121,7 +121,7 @@ All apps offer synchronous methods (e.g., search, query, summarize) and their as
 
 - The SearchApp and ChatApp share a document database.
 
-- Use the add_documents method to populate the database and delete_documents to remove entries.
+- Use the ``add_documents()`` method to populate the database and ``delete_documents()`` to remove entries.
 
 **3.	Cached Models:**
 

@@ -112,7 +112,7 @@ Ask a question and receive a response based on your documents:
     insightvault chat "What is Rayleigh scattering?"
 
 
-**Important:** The CLI chat does not preserve history between commands. For persistent conversations and enhanced features, consider building custom apps as described in ::ref:building_apps.
+**Important:** The CLI chat does not preserve history between commands. For persistent conversations and enhanced features, consider building custom apps as described in :ref:`building_apps`.
 
 
 Notes
