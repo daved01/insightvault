@@ -57,4 +57,4 @@ jobs:
             TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
             python -m build
-            twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+            twine upload dist/*
