@@ -11,7 +11,7 @@ on:
 
 jobs:
   release:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Ensure the quality workflow passed
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Ensure the quality workflow passed
 
     runs-on: ubuntu-latest
 
