@@ -1,9 +1,6 @@
 name: Create Release
 
 on:
-  push:
-    branches:
-      - main
   workflow_run:
     workflows: ["Quality Checks on Main"]
     types:
@@ -74,4 +71,3 @@ jobs:
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: docs/build/html
-            publish_branch: gh-pages
