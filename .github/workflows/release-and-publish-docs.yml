@@ -3,7 +3,7 @@ name: Create Release
 on:
   push:
     branches:
-      - main
+      - chore/docs
   workflow_run:
     workflows: ["Quality Checks on Main"]
     types:
