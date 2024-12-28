@@ -1,0 +1,861 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="Development setup" href="develop.html" />
+
+    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>API reference - InsightVault 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">InsightVault 0.0.2 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">InsightVault 0.0.2 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building_apps.html">Building Apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the CLI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="develop.html">Development setup</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">API reference</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/contents/api_reference.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="api-reference">
+<span id="id1"></span><h1>API reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h1>
+<p>Documentation of the different classes, starting from the app layer down to the model layer.</p>
+<section id="module-insightvault.app.base">
+<span id="app"></span><h2>App<a class="headerlink" href="#module-insightvault.app.base" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.app.base.</span></span><span class="sig-name descname"><span class="pre">BaseApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'insightvault.app.base'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.app.base.BaseApp" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp.add_documents">
+<span class="sig-name descname"><span class="pre">add_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.base.BaseApp.add_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Add documents to the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp.async_add_documents">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_add_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.base.BaseApp.async_add_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Async version of add_document</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp.async_delete_all_documents">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_delete_all_documents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.base.BaseApp.async_delete_all_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Async version of delete_all_documents</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp.async_list_documents">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_list_documents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.base.BaseApp.async_list_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Async version of list_documents</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp.delete_all_documents">
+<span class="sig-name descname"><span class="pre">delete_all_documents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.base.BaseApp.delete_all_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Delete all documents from the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp.init">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.base.BaseApp.init" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the app</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.base.BaseApp.list_documents">
+<span class="sig-name descname"><span class="pre">list_documents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.base.BaseApp.list_documents" title="Link to this definition">¶</a></dt>
+<dd><p>List all documents in the database</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function" id="module-insightvault.app.cli">
+<dt class="sig sig-object py" id="insightvault.app.cli.main">
+<span class="sig-prename descclassname"><span class="pre">insightvault.app.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.cli.main" title="Link to this definition">¶</a></dt>
+<dd><p>Entry point for the CLI</p>
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.app.rag">
+<dt class="sig sig-object py" id="insightvault.app.rag.RAGApp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.app.rag.</span></span><span class="sig-name descname"><span class="pre">RAGApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'insightvault.app.rag'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.app.rag.RAGApp" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#insightvault.app.search.SearchApp" title="insightvault.app.search.SearchApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">SearchApp</span></code></a></p>
+<p>RAG application for retrieval-augmented generation</p>
+<p>This application extends the SearchApp with RAG-specific query functionality.
+All other methods (add_documents, delete_documents, etc.) are inherited from
+SearchApp.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.rag.RAGApp.async_clear">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.rag.RAGApp.async_clear" title="Link to this definition">¶</a></dt>
+<dd><p>Async version of clear</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.rag.RAGApp.async_query">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.app.rag.RAGApp.async_query" title="Link to this definition">¶</a></dt>
+<dd><p>Async version of query</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.rag.RAGApp.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.rag.RAGApp.clear" title="Link to this definition">¶</a></dt>
+<dd><p>Clears the chat history</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.rag.RAGApp.init">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.rag.RAGApp.init" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the RAG app</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.rag.RAGApp.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.app.rag.RAGApp.query" title="Link to this definition">¶</a></dt>
+<dd><p>Query the database for documents similar to the query</p>
+<p>This RAG-specific implementation returns Document objects instead of strings.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.app.search">
+<dt class="sig sig-object py" id="insightvault.app.search.SearchApp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.app.search.</span></span><span class="sig-name descname"><span class="pre">SearchApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'insightvault.app.search'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.app.search.SearchApp" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#insightvault.app.base.BaseApp" title="insightvault.app.base.BaseApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseApp</span></code></a></p>
+<p>Search application for semantic search</p>
+<p>This application is used to query the database and add documents to the database.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>db (Database): The database service.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.search.SearchApp.async_query">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.app.search.SearchApp.async_query" title="Link to this definition">¶</a></dt>
+<dd><p>Async version of query</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.search.SearchApp.init">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.search.SearchApp.init" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the search app</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.search.SearchApp.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.app.search.SearchApp.query" title="Link to this definition">¶</a></dt>
+<dd><p>Query the database for documents similar to the query.</p>
+<p>Returns an alphabetically sorted list of document titles.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.app.summarizer">
+<dt class="sig sig-object py" id="insightvault.app.summarizer.SummarizerApp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.app.summarizer.</span></span><span class="sig-name descname"><span class="pre">SummarizerApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'insightvault.app.summarizer'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.app.summarizer.SummarizerApp" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#insightvault.app.base.BaseApp" title="insightvault.app.base.BaseApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseApp</span></code></a></p>
+<p>Summarizer application</p>
+<p>This application is used to summarize documents.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.summarizer.SummarizerApp.async_summarize">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_summarize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.summarizer.SummarizerApp.async_summarize" title="Link to this definition">¶</a></dt>
+<dd><p>Async version of summarize</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.summarizer.SummarizerApp.init">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.summarizer.SummarizerApp.init" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the summarizer app</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.app.summarizer.SummarizerApp.summarize">
+<span class="sig-name descname"><span class="pre">summarize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.app.summarizer.SummarizerApp.summarize" title="Link to this definition">¶</a></dt>
+<dd><p>Summarize a list of documents</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-insightvault.services.database">
+<span id="services"></span><h2>Services<a class="headerlink" href="#module-insightvault.services.database" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="insightvault.services.database.AbstractDatabaseService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.database.</span></span><span class="sig-name descname"><span class="pre">AbstractDatabaseService</span></span><a class="headerlink" href="#insightvault.services.database.AbstractDatabaseService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract database service</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.AbstractDatabaseService.add_documents">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.database.AbstractDatabaseService.add_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Add a list of documents to the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.AbstractDatabaseService.delete_all_documents">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_all_documents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.database.AbstractDatabaseService.delete_all_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Delete all documents from the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.AbstractDatabaseService.get_documents">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_documents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.database.AbstractDatabaseService.get_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Get all documents from the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.AbstractDatabaseService.query">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.database.AbstractDatabaseService.query" title="Link to this definition">¶</a></dt>
+<dd><p>Query the database for documents similar to the query embedding</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="insightvault.services.database.ChromaDatabaseService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.database.</span></span><span class="sig-name descname"><span class="pre">ChromaDatabaseService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">persist_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/.db'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#insightvault.services.database.AbstractDatabaseService" title="insightvault.services.database.AbstractDatabaseService"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDatabaseService</span></code></a></p>
+<p>Chroma database service</p>
+<p>This service is used to interact with the Chroma database.</p>
+<p>Embedding functions are not provided here, so the caller must provide them.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.ChromaDatabaseService.add_documents">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService.add_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Add a list of documents to the database. The documents must have
+embeddings.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.ChromaDatabaseService.delete_all_documents">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_all_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService.delete_all_documents" title="Link to this definition">¶</a></dt>
+<dd><p>Delete all documents in the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.ChromaDatabaseService.get_documents">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService.get_documents" title="Link to this definition">¶</a></dt>
+<dd><p>List all documents in the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.database.ChromaDatabaseService.query">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService.query" title="Link to this definition">¶</a></dt>
+<dd><p>Query the database for documents similar to the query embedding</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.services.embedding">
+<dt class="sig sig-object py" id="insightvault.services.embedding.EmbeddingService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.embedding.</span></span><span class="sig-name descname"><span class="pre">EmbeddingService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all-MiniLM-L6-v2'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.embedding.EmbeddingService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Service for generating embeddings from text using sentence-transformers.</p>
+<p>To use it, you must first call <cite>await get_client()</cite> to ensure the model is loaded.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>model_name: The name of the embedding model to use (default: “all-MiniLM-L6-v2”)
+client: The embedding model client
+loading_task: The task that loads the embedding model
+logger: The logger for the embedding service</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.embedding.EmbeddingService.embed">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">embed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.embedding.EmbeddingService.embed" title="Link to this definition">¶</a></dt>
+<dd><p>Generate embeddings for a list of texts</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>texts: List of text strings to embed</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of embedding vectors (as lists of floats)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.embedding.EmbeddingService.init">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.embedding.EmbeddingService.init" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the embedding service</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.services.llm">
+<dt class="sig sig-object py" id="insightvault.services.llm.AbstractLLMService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.llm.</span></span><span class="sig-name descname"><span class="pre">AbstractLLMService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.llm.AbstractLLMService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.AbstractLLMService.chat">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.AbstractLLMService.chat" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a response from the model while maintaining chat history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.AbstractLLMService.clear_chat_history">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clear_chat_history</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.AbstractLLMService.clear_chat_history" title="Link to this definition">¶</a></dt>
+<dd><p>Clear the chat history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.AbstractLLMService.init">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.AbstractLLMService.init" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare the LLM service for use, such as loading model weights.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.AbstractLLMService.query">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.AbstractLLMService.query" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a one-off response from the model without chat history.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="insightvault.services.llm.BaseLLMService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.llm.</span></span><span class="sig-name descname"><span class="pre">BaseLLMService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.llm.BaseLLMService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#insightvault.services.llm.AbstractLLMService" title="insightvault.services.llm.AbstractLLMService"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractLLMService</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="insightvault.services.llm.OllamaLLMService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.llm.</span></span><span class="sig-name descname"><span class="pre">OllamaLLMService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'llama3'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.llm.OllamaLLMService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#insightvault.services.llm.BaseLLMService" title="insightvault.services.llm.BaseLLMService"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseLLMService</span></code></a></p>
+<p>Ollama LLM service</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.OllamaLLMService.chat">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.OllamaLLMService.chat" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a response from the model while maintaining chat history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.OllamaLLMService.clear_chat_history">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clear_chat_history</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.OllamaLLMService.clear_chat_history" title="Link to this definition">¶</a></dt>
+<dd><p>Clear the chat history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.OllamaLLMService.init">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.OllamaLLMService.init" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the LLM service</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.llm.OllamaLLMService.query">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#insightvault.services.llm.OllamaLLMService.query" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a one-off response from the model without chat history.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.services.prompt">
+<dt class="sig sig-object py" id="insightvault.services.prompt.PromptService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.prompt.</span></span><span class="sig-name descname"><span class="pre">PromptService</span></span><a class="headerlink" href="#insightvault.services.prompt.PromptService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Prompt service</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.prompt.PromptService.get_prompt">
+<span class="sig-name descname"><span class="pre">get_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#insightvault.services.prompt.PromptService.get_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves a predefined prompt for a specific use case and injects
+context if needed. The context can include parameters like ‘text’, etc.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>prompt_type (str): The type of prompt to retrieve.
+context (dict | None): The context to inject into the prompt.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: The prompt with the injected context.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.services.splitter">
+<dt class="sig sig-object py" id="insightvault.services.splitter.SplitterService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.splitter.</span></span><span class="sig-name descname"><span class="pre">SplitterService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1024</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_overlap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.splitter.SplitterService" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Splitter service</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>chunk_size: The size of each chunk (default: 1024)
+chunk_overlap: The overlap between chunks (default: 256)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="insightvault.services.splitter.SplitterService.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.splitter.SplitterService.split" title="Link to this definition">¶</a></dt>
+<dd><p>Split a document into chunks of a given size</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-insightvault.models.database">
+<span id="models"></span><h2>Models<a class="headerlink" href="#module-insightvault.models.database" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="insightvault.models.database.DistanceFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.models.database.</span></span><span class="sig-name descname"><span class="pre">DistanceFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.models.database.DistanceFunction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.database.DistanceFunction.COSINE">
+<span class="sig-name descname"><span class="pre">COSINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cosine'</span></em><a class="headerlink" href="#insightvault.models.database.DistanceFunction.COSINE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.database.DistanceFunction.L2">
+<span class="sig-name descname"><span class="pre">L2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'l2'</span></em><a class="headerlink" href="#insightvault.models.database.DistanceFunction.L2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-insightvault.models.document">
+<dt class="sig sig-object py" id="insightvault.models.document.Document">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.models.document.</span></span><span class="sig-name descname"><span class="pre">Document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata:</span> <span class="pre">~collections.abc.Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding:</span> <span class="pre">~collections.abc.Sequence[float]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at:</span> <span class="pre">~datetime.datetime</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_at:</span> <span class="pre">~datetime.datetime</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.models.document.Document" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Document model</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id: str
+title: str
+content: str
+metadata: dict[str, Any]
+embedding: list[float] | None
+created_at: datetime
+updated_at: datetime</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#insightvault.models.document.Document.content" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#insightvault.models.document.Document.created_at" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.embedding">
+<span class="sig-name descname"><span class="pre">embedding</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#insightvault.models.document.Document.embedding" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#insightvault.models.document.Document.id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#insightvault.models.document.Document.metadata" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#insightvault.models.document.Document.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#insightvault.models.document.Document.title" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="insightvault.models.document.Document.updated_at">
+<span class="sig-name descname"><span class="pre">updated_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#insightvault.models.document.Document.updated_at" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="develop.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Development setup</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, David Kirchhoff
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">API reference</a><ul>
+<li><a class="reference internal" href="#module-insightvault.app.base">App</a><ul>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp"><code class="docutils literal notranslate"><span class="pre">BaseApp</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp.add_documents"><code class="docutils literal notranslate"><span class="pre">BaseApp.add_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp.async_add_documents"><code class="docutils literal notranslate"><span class="pre">BaseApp.async_add_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp.async_delete_all_documents"><code class="docutils literal notranslate"><span class="pre">BaseApp.async_delete_all_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp.async_list_documents"><code class="docutils literal notranslate"><span class="pre">BaseApp.async_list_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp.delete_all_documents"><code class="docutils literal notranslate"><span class="pre">BaseApp.delete_all_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp.init"><code class="docutils literal notranslate"><span class="pre">BaseApp.init()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.base.BaseApp.list_documents"><code class="docutils literal notranslate"><span class="pre">BaseApp.list_documents()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.app.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.rag.RAGApp"><code class="docutils literal notranslate"><span class="pre">RAGApp</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.app.rag.RAGApp.async_clear"><code class="docutils literal notranslate"><span class="pre">RAGApp.async_clear()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.rag.RAGApp.async_query"><code class="docutils literal notranslate"><span class="pre">RAGApp.async_query()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.rag.RAGApp.clear"><code class="docutils literal notranslate"><span class="pre">RAGApp.clear()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.rag.RAGApp.init"><code class="docutils literal notranslate"><span class="pre">RAGApp.init()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.rag.RAGApp.query"><code class="docutils literal notranslate"><span class="pre">RAGApp.query()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.app.search.SearchApp"><code class="docutils literal notranslate"><span class="pre">SearchApp</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.app.search.SearchApp.async_query"><code class="docutils literal notranslate"><span class="pre">SearchApp.async_query()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.search.SearchApp.init"><code class="docutils literal notranslate"><span class="pre">SearchApp.init()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.search.SearchApp.query"><code class="docutils literal notranslate"><span class="pre">SearchApp.query()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.app.summarizer.SummarizerApp"><code class="docutils literal notranslate"><span class="pre">SummarizerApp</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.app.summarizer.SummarizerApp.async_summarize"><code class="docutils literal notranslate"><span class="pre">SummarizerApp.async_summarize()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.summarizer.SummarizerApp.init"><code class="docutils literal notranslate"><span class="pre">SummarizerApp.init()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.app.summarizer.SummarizerApp.summarize"><code class="docutils literal notranslate"><span class="pre">SummarizerApp.summarize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-insightvault.services.database">Services</a><ul>
+<li><a class="reference internal" href="#insightvault.services.database.AbstractDatabaseService"><code class="docutils literal notranslate"><span class="pre">AbstractDatabaseService</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.services.database.AbstractDatabaseService.add_documents"><code class="docutils literal notranslate"><span class="pre">AbstractDatabaseService.add_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.database.AbstractDatabaseService.delete_all_documents"><code class="docutils literal notranslate"><span class="pre">AbstractDatabaseService.delete_all_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.database.AbstractDatabaseService.get_documents"><code class="docutils literal notranslate"><span class="pre">AbstractDatabaseService.get_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.database.AbstractDatabaseService.query"><code class="docutils literal notranslate"><span class="pre">AbstractDatabaseService.query()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.services.database.ChromaDatabaseService"><code class="docutils literal notranslate"><span class="pre">ChromaDatabaseService</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.services.database.ChromaDatabaseService.add_documents"><code class="docutils literal notranslate"><span class="pre">ChromaDatabaseService.add_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.database.ChromaDatabaseService.delete_all_documents"><code class="docutils literal notranslate"><span class="pre">ChromaDatabaseService.delete_all_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.database.ChromaDatabaseService.get_documents"><code class="docutils literal notranslate"><span class="pre">ChromaDatabaseService.get_documents()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.database.ChromaDatabaseService.query"><code class="docutils literal notranslate"><span class="pre">ChromaDatabaseService.query()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.services.embedding.EmbeddingService"><code class="docutils literal notranslate"><span class="pre">EmbeddingService</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.services.embedding.EmbeddingService.embed"><code class="docutils literal notranslate"><span class="pre">EmbeddingService.embed()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.embedding.EmbeddingService.init"><code class="docutils literal notranslate"><span class="pre">EmbeddingService.init()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.services.llm.AbstractLLMService"><code class="docutils literal notranslate"><span class="pre">AbstractLLMService</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.services.llm.AbstractLLMService.chat"><code class="docutils literal notranslate"><span class="pre">AbstractLLMService.chat()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.llm.AbstractLLMService.clear_chat_history"><code class="docutils literal notranslate"><span class="pre">AbstractLLMService.clear_chat_history()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.llm.AbstractLLMService.init"><code class="docutils literal notranslate"><span class="pre">AbstractLLMService.init()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.llm.AbstractLLMService.query"><code class="docutils literal notranslate"><span class="pre">AbstractLLMService.query()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.services.llm.BaseLLMService"><code class="docutils literal notranslate"><span class="pre">BaseLLMService</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.llm.OllamaLLMService"><code class="docutils literal notranslate"><span class="pre">OllamaLLMService</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.services.llm.OllamaLLMService.chat"><code class="docutils literal notranslate"><span class="pre">OllamaLLMService.chat()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.llm.OllamaLLMService.clear_chat_history"><code class="docutils literal notranslate"><span class="pre">OllamaLLMService.clear_chat_history()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.llm.OllamaLLMService.init"><code class="docutils literal notranslate"><span class="pre">OllamaLLMService.init()</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.services.llm.OllamaLLMService.query"><code class="docutils literal notranslate"><span class="pre">OllamaLLMService.query()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.services.prompt.PromptService"><code class="docutils literal notranslate"><span class="pre">PromptService</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.services.prompt.PromptService.get_prompt"><code class="docutils literal notranslate"><span class="pre">PromptService.get_prompt()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.services.splitter.SplitterService"><code class="docutils literal notranslate"><span class="pre">SplitterService</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.services.splitter.SplitterService.split"><code class="docutils literal notranslate"><span class="pre">SplitterService.split()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-insightvault.models.database">Models</a><ul>
+<li><a class="reference internal" href="#insightvault.models.database.DistanceFunction"><code class="docutils literal notranslate"><span class="pre">DistanceFunction</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.models.database.DistanceFunction.COSINE"><code class="docutils literal notranslate"><span class="pre">DistanceFunction.COSINE</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.database.DistanceFunction.L2"><code class="docutils literal notranslate"><span class="pre">DistanceFunction.L2</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#insightvault.models.document.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a><ul>
+<li><a class="reference internal" href="#insightvault.models.document.Document.content"><code class="docutils literal notranslate"><span class="pre">Document.content</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.document.Document.created_at"><code class="docutils literal notranslate"><span class="pre">Document.created_at</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.document.Document.embedding"><code class="docutils literal notranslate"><span class="pre">Document.embedding</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.document.Document.id"><code class="docutils literal notranslate"><span class="pre">Document.id</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.document.Document.metadata"><code class="docutils literal notranslate"><span class="pre">Document.metadata</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.document.Document.model_config"><code class="docutils literal notranslate"><span class="pre">Document.model_config</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.document.Document.title"><code class="docutils literal notranslate"><span class="pre">Document.title</span></code></a></li>
+<li><a class="reference internal" href="#insightvault.models.document.Document.updated_at"><code class="docutils literal notranslate"><span class="pre">Document.updated_at</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>
