@@ -1,6 +1,9 @@
 name: Create Release
 
 on:
+  push:
+    branches:
+      - main
   workflow_run:
     workflows: ["Quality Checks on Main"]
     types:
@@ -24,6 +27,7 @@ jobs:
       - name: Install the project
         run: |
             pip install -e .
+            pip install bumpversion twine
 
       - name: Run version check
         run: |
@@ -36,27 +40,38 @@ jobs:
             exit 1
             fi
 
-      - name: Install dependencies
-        run: |
-            pip install -r docs/requirements.txt
-            pip install bumpversion twine
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: docs/build/html
-
       - name: Create new version tag
         run: |
           git tag v${{ env.current_version }}
           git push origin v${{ env.current_version }}
 
-      - name: Build the package and upload to Test PyPI
+      - name: Build the package and upload to PyPI
         env:
             TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
             TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
             python -m build
             twine upload dist/*
+
+      - name: Install documentation dependencies
+        run: |
+            pip install -r docs/requirements.txt
+
+      - name: Build HTML
+        run: |
+          cd docs
+          make html
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-docs
+          path: docs/build/html/
+
+      - name: Deploy documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: docs/build/html
+            publish_branch: gh-pages
