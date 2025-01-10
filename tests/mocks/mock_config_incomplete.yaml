@@ -1,0 +1,12 @@
+# Database is missing
+
+
+splitter:
+    chunk_size: 12
+    # chunk overlap is missing
+
+llm:
+    model: "some-model"
+
+embedding:
+    invalid_name: "another-model"

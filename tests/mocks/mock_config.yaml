@@ -1,0 +1,14 @@
+database:
+    max_num_results: 12
+    result_threshold: 0.82
+    path: "mock-path"
+
+splitter:
+    chunk_size: 12
+    chunk_overlap: 6
+
+llm:
+    model: "some-model"
+
+embedding:
+    model: "another-model"

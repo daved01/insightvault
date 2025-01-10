@@ -4,16 +4,17 @@ import numpy as np
 import pytest
 
 from insightvault.services.embedding import EmbeddingService
+from tests.unit import BaseTest
 
 
-class TestEmbeddingService:
+class TestEmbeddingService(BaseTest):
     @pytest.fixture
     def mock_embeddings(self):
         """Create mock embeddings array"""
         return np.array([[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]])
 
     @pytest.fixture
-    async def embedding_service(self):
+    async def embedding_service(self, mock_embedding_config):
         """Create embedding service with mocked client"""
         with patch(
             "insightvault.services.embedding.SentenceTransformer"
@@ -24,19 +25,19 @@ class TestEmbeddingService:
                 return_value=np.array([[0.1, 0.2, 0.3]])
             )
 
-            service = EmbeddingService(model_name="test-model")
+            service = EmbeddingService(config=mock_embedding_config)
             service.client = mock_transformer.return_value
             return service
 
     @pytest.mark.asyncio
-    async def test_init_loads_model(self):
+    async def test_init_loads_model(self, mock_embedding_config):
         with patch(
             "insightvault.services.embedding.SentenceTransformer"
         ) as mock_transformer:
-            service = EmbeddingService(model_name="test-model")
+            service = EmbeddingService(config=mock_embedding_config)
             await service.init()
 
-            mock_transformer.assert_called_once_with("test-model")
+            mock_transformer.assert_called_once_with("all-MiniLM-L6-v2")
             assert service.client == mock_transformer.return_value
 
     @pytest.mark.asyncio
@@ -78,16 +79,17 @@ class TestEmbeddingService:
             [], batch_size=32, show_progress_bar=False, convert_to_numpy=True
         )
 
-    def test_custom_model_name(self):
+    def test_custom_model_name(self, mock_embedding_config):
         """Test service initialization with custom model name"""
         custom_model = "custom-bert-model"
-        service = EmbeddingService(model_name=custom_model)
-        assert service.model_name == custom_model
+        service = EmbeddingService(config=mock_embedding_config)
+        service.config.model = custom_model
+        assert service.config.model == custom_model
 
     @pytest.mark.asyncio
-    async def test_embed_without_init_raises_error(self):
+    async def test_embed_without_init_raises_error(self, mock_embedding_config):
         """Test that embed raises error if model not initialized"""
-        service = EmbeddingService()
+        service = EmbeddingService(config=mock_embedding_config)
 
         with pytest.raises(RuntimeError) as exc:
             await service.embed(["test"])
@@ -95,7 +97,7 @@ class TestEmbeddingService:
         assert "Embedding model is not loaded" in str(exc.value)
 
     @pytest.mark.asyncio
-    async def test_init_uses_asyncio_to_thread(self):
+    async def test_init_uses_asyncio_to_thread(self, mock_embedding_config):
         """Test that init uses asyncio.to_thread for model loading"""
         with (
             patch(
@@ -106,7 +108,7 @@ class TestEmbeddingService:
             ) as mock_transformer,
         ):
             mock_to_thread.return_value = mock_transformer.return_value
-            service = EmbeddingService()
+            service = EmbeddingService(config=mock_embedding_config)
 
             await service.init()
 

@@ -21,9 +21,9 @@ class TestSplitterService(BaseTest):
             yield mock
 
     @pytest.fixture
-    def mock_splitter_service(self, mock_splitter):
+    def mock_splitter_service(self, mock_splitter, mock_splitter_config):
         """Create a splitter service with mocked sentence splitter"""
-        return SplitterService(chunk_size=50, chunk_overlap=10)
+        return SplitterService(config=mock_splitter_config)
 
     def test_split_document_creates_chunks(
         self, mock_splitter_service, sample_document
@@ -35,9 +35,11 @@ class TestSplitterService(BaseTest):
         assert len(chunks) == expected_chunks_count
         assert all(isinstance(chunk, Document) for chunk in chunks)
 
-    def test_splitter_initialization(self, mock_splitter):
+    def test_splitter_initialization(self, mock_splitter, mock_splitter_config):
         """Test splitter initialization with custom parameters"""
-        _ = SplitterService(chunk_size=100, chunk_overlap=20)
+        mock_splitter_config.chunk_size = 100
+        mock_splitter_config.chunk_overlap = 20
+        _ = SplitterService(config=mock_splitter_config)
 
         mock_splitter.assert_called_once_with(chunk_size=100, chunk_overlap=20)
 

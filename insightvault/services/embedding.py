@@ -3,6 +3,7 @@ from logging import Logger
 
 from sentence_transformers import SentenceTransformer
 
+from ..models.config import EmbeddingConfig
 from ..utils.logging import get_logger
 
 
@@ -13,21 +14,21 @@ class EmbeddingService:
 
 
     Attributes:
-        model_name: The name of the embedding model to use (default: "all-MiniLM-L6-v2")
+        config: The configuration for the embedding service
         client: The embedding model client
         loading_task: The task that loads the embedding model
         logger: The logger for the embedding service
     """
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2") -> None:
+    def __init__(self, config: EmbeddingConfig) -> None:
         self.logger: Logger = get_logger("insightvault.services.embedding")
-        self.model_name: str = model_name
+        self.config = config
         self.client: SentenceTransformer | None = None
 
     async def init(self) -> None:
         """Initialize the embedding service"""
-        self.client = await asyncio.to_thread(SentenceTransformer, self.model_name)
-        self.logger.debug(f"Embedding model loaded `{self.model_name}`!")
+        self.client = await asyncio.to_thread(SentenceTransformer, self.config.model)
+        self.logger.debug(f"Embedding model loaded `{self.config.model}`!")
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
         """Generate embeddings for a list of texts

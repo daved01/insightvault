@@ -8,6 +8,7 @@ from chromadb.config import Settings
 from ..constants import (
     DEFAULT_COLLECTION_NAME,
 )
+from ..models.config import DatabaseConfig
 from ..models.database import DistanceFunction
 from ..models.document import Document
 from ..utils.logging import get_logger
@@ -26,7 +27,6 @@ class AbstractDatabaseService(ABC):
         query_embedding: Sequence[float],
         collection_name: str = DEFAULT_COLLECTION_NAME,
         filter_docs: bool = True,
-        k: int = 8,
     ) -> list[Document]:
         """Query the database for documents similar to the query embedding"""
 
@@ -53,16 +53,15 @@ class ChromaDatabaseService(AbstractDatabaseService):
 
     def __init__(
         self,
-        persist_directory: str = "data/.db",
+        config: DatabaseConfig,
     ):
         self.logger = get_logger("insightvault.services.database")
-        self.persist_directory = persist_directory
         self.client = chromadb.PersistentClient(
-            path=self.persist_directory,
+            path=config.path,
             settings=Settings(anonymized_telemetry=False, allow_reset=True),
         )
+        self.config = config
         self.similarity_function = self._get_db_value(DistanceFunction.COSINE)
-        self.threshold = 0.9
         self.logger.debug("Database initialized")
 
     async def add_documents(
@@ -91,7 +90,6 @@ class ChromaDatabaseService(AbstractDatabaseService):
         query_embedding: Sequence[float],
         collection_name: str = DEFAULT_COLLECTION_NAME,
         filter_docs: bool = True,
-        k: int = 8,
     ) -> list[Document]:
         """Query the database for documents similar to the query embedding"""
 
@@ -104,13 +102,17 @@ class ChromaDatabaseService(AbstractDatabaseService):
         results = collection.query(
             query_embeddings=[query_embedding],
             include=["documents", "metadatas", "distances"],  # type: ignore[list-item]
-            n_results=k,
+            n_results=self.config.max_num_results,
         )
 
         # Filter the documents based on the distance
         if filter_docs:
-            self.logger.debug(f"Filtering documents with threshold: {self.threshold}")
-            results = self._filter_docs(results=results, threshold=self.threshold)
+            self.logger.debug(
+                f"Filtering documents with threshold: {self.config.result_threshold}"
+            )
+            results = self._filter_docs(
+                results=results, threshold=self.config.result_threshold
+            )
 
         documents = []
         if results and results["documents"]:

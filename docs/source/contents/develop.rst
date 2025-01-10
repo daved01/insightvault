@@ -16,7 +16,7 @@ First, clone the repository from the version control system and navigate to the 
 .. code-block:: bash
 
    git clone https://github.com/daved01/insightvault.git
-   cd insight-vault
+   cd insightvault
 
 
 **2. Set Up a Virtual Environment**

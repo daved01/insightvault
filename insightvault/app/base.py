@@ -1,5 +1,8 @@
 import asyncio
 
+import yaml
+
+from ..models.config import AppConfig
 from ..models.document import Document
 from ..services.database import ChromaDatabaseService
 from ..services.embedding import EmbeddingService
@@ -8,12 +11,15 @@ from ..utils.logging import get_logger
 
 
 class BaseApp:
-    def __init__(self, name: str = "insightvault.app.base") -> None:
+    def __init__(
+        self, name: str = "insightvault.app.base", config_path: str = "./config.yaml"
+    ) -> None:
         self.name = name
         self.logger = get_logger(name)
-        self.db_service = ChromaDatabaseService()
-        self.splitter_service = SplitterService()
-        self.embedder_service = EmbeddingService()
+        self.config = self._get_config(path=config_path)
+        self.db_service = ChromaDatabaseService(config=self.config.database)
+        self.splitter_service = SplitterService(config=self.config.splitter)
+        self.embedder_service = EmbeddingService(config=self.config.embedding)
 
     async def init(self) -> None:
         """Initialize the app"""
@@ -68,3 +74,13 @@ class BaseApp:
         """Async version of list_documents"""
         self.logger.debug("Async listing all documents ...")
         return await self.db_service.get_documents()
+
+    def _get_config(self, path: str = "./config.yaml") -> AppConfig:
+        """Reads the configuration file from the path"""
+        with open(path) as file:
+            config_data = yaml.safe_load(file)
+        try:
+            return AppConfig(**config_data)
+        except Exception as e:
+            print(f"Config validation error: {e}")
+            raise
