@@ -6,8 +6,8 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
-        <title>insightvault.services package - InsightVault 0.0.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+        <title>insightvault.services package - InsightVault 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
     
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">InsightVault 0.0.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">InsightVault 0.0.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">InsightVault 0.0.2 documentation</span>
+  <span class="sidebar-brand-text">InsightVault 0.0.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -284,7 +284,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="insightvault.services.database.AbstractDatabaseService.query">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../api_reference.html#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.database.AbstractDatabaseService.query" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../api_reference.html#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.database.AbstractDatabaseService.query" title="Link to this definition">¶</a></dt>
 <dd><p>Query the database for documents similar to the query embedding</p>
 </dd></dl>
 
@@ -292,7 +292,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="insightvault.services.database.ChromaDatabaseService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.database.</span></span><span class="sig-name descname"><span class="pre">ChromaDatabaseService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">persist_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/.db'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.database.</span></span><span class="sig-name descname"><span class="pre">ChromaDatabaseService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DatabaseConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../api_reference.html#insightvault.services.database.AbstractDatabaseService" title="insightvault.services.database.AbstractDatabaseService"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDatabaseService</span></code></a></p>
 <p>Chroma database service</p>
 <p>This service is used to interact with the Chroma database.</p>
@@ -318,7 +318,7 @@ embeddings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="insightvault.services.database.ChromaDatabaseService.query">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../api_reference.html#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService.query" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_docs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../api_reference.html#insightvault.models.document.Document" title="insightvault.models.document.Document"><span class="pre">Document</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#insightvault.services.database.ChromaDatabaseService.query" title="Link to this definition">¶</a></dt>
 <dd><p>Query the database for documents similar to the query embedding</p>
 </dd></dl>
 
@@ -329,12 +329,12 @@ embeddings.</p>
 <span id="insightvault-services-embedding-module"></span><h2>insightvault.services.embedding module<a class="headerlink" href="#module-insightvault.services.embedding" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="insightvault.services.embedding.EmbeddingService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.embedding.</span></span><span class="sig-name descname"><span class="pre">EmbeddingService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all-MiniLM-L6-v2'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.embedding.EmbeddingService" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.embedding.</span></span><span class="sig-name descname"><span class="pre">EmbeddingService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">EmbeddingConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.embedding.EmbeddingService" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Service for generating embeddings from text using sentence-transformers.</p>
 <p>To use it, you must first call <cite>await get_client()</cite> to ensure the model is loaded.</p>
 <dl class="simple">
-<dt>Attributes:</dt><dd><p>model_name: The name of the embedding model to use (default: “all-MiniLM-L6-v2”)
+<dt>Attributes:</dt><dd><p>config: The configuration for the embedding service
 client: The embedding model client
 loading_task: The task that loads the embedding model
 logger: The logger for the embedding service</p>
@@ -459,12 +459,11 @@ context (dict | None): The context to inject into the prompt.</p>
 <span id="insightvault-services-splitter-module"></span><h2>insightvault.services.splitter module<a class="headerlink" href="#module-insightvault.services.splitter" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="insightvault.services.splitter.SplitterService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.splitter.</span></span><span class="sig-name descname"><span class="pre">SplitterService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1024</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_overlap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.splitter.SplitterService" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">insightvault.services.splitter.</span></span><span class="sig-name descname"><span class="pre">SplitterService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SplitterConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#insightvault.services.splitter.SplitterService" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Splitter service</p>
 <dl class="simple">
-<dt>Attributes:</dt><dd><p>chunk_size: The size of each chunk (default: 1024)
-chunk_overlap: The overlap between chunks (default: 256)</p>
+<dt>Attributes:</dt><dd><p>config: The configuration for the splitter</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -589,7 +588,7 @@ chunk_overlap: The overlap between chunks (default: 256)</p>
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+</div><script src="../../_static/documentation_options.js?v=47de8214"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
