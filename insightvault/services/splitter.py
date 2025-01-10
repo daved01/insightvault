@@ -1,5 +1,6 @@
 from llama_index.core.node_parser import SentenceSplitter
 
+from ..models.config import SplitterConfig
 from ..models.document import Document
 from ..utils.logging import get_logger
 
@@ -9,16 +10,14 @@ class SplitterService:
 
 
     Attributes:
-        chunk_size: The size of each chunk (default: 1024)
-        chunk_overlap: The overlap between chunks (default: 256)
+        config: The configuration for the splitter
     """
 
-    def __init__(self, chunk_size: int = 1024, chunk_overlap: int = 256):
+    def __init__(self, config: SplitterConfig):
         self.logger = get_logger("insightvault.splitter")
-        self.chunk_size = chunk_size
-        self.chunk_overlap = chunk_overlap
+        self.config = config
         self.text_splitter = SentenceSplitter(
-            chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap
+            chunk_size=self.config.chunk_size, chunk_overlap=self.config.chunk_overlap
         )
 
     def split(self, document: Document) -> list[Document]:

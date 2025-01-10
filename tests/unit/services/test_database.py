@@ -27,29 +27,31 @@ class TestChromaDatabaseService(BaseTest):
         return client
 
     @pytest.fixture
-    async def db_service(self, mock_client):
+    async def db_service(self, mock_client, mock_database_config):
         """Create database service with mocked client"""
         with patch(
             "insightvault.services.database.chromadb.PersistentClient"
         ) as mock_chroma:
             mock_chroma.return_value = mock_client
-            service = ChromaDatabaseService(persist_directory="test/db")
+            service = ChromaDatabaseService(config=mock_database_config)
             return service
 
     @pytest.mark.asyncio
     @patch("insightvault.services.database.chromadb")
     @patch("insightvault.services.database.get_logger")
-    async def test_init_creates_client(self, mock_get_logger, mock_chromadb):
+    async def test_init_creates_client(
+        self, mock_get_logger, mock_chromadb, mock_database_config
+    ):
         """Test database initialization"""
         # Create and initialize service
-        service = ChromaDatabaseService(persist_directory="data/.db")
+        service = ChromaDatabaseService(config=mock_database_config)
 
         # Check PersistentClient was called
         assert len(mock_chromadb.mock_calls) == 1
         call_args = mock_chromadb.PersistentClient.call_args
 
         # Verify the arguments
-        assert call_args.kwargs["path"] == "data/.db"
+        assert call_args.kwargs["path"] == "./data/.db"
         assert call_args.kwargs["settings"].anonymized_telemetry is False
         assert call_args.kwargs["settings"].allow_reset is True
 
@@ -146,9 +148,9 @@ class TestChromaDatabaseService(BaseTest):
         assert len(results) == 1
         assert results[0].title == "Doc 1"
 
-    def test_get_db_value_returns_correct_string(self):
+    def test_get_db_value_returns_correct_string(self, mock_database_config):
         """Test distance function conversion"""
-        service = ChromaDatabaseService()
+        service = ChromaDatabaseService(config=mock_database_config)
 
         assert service._get_db_value(DistanceFunction.COSINE) == "cosine"
         assert service._get_db_value(DistanceFunction.L2) == "l2"

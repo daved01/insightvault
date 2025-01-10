@@ -1,0 +1,14 @@
+database:
+    max_num_results: 8
+    result_threshold: 0.95
+    path: "./data/db"
+
+splitter:
+    chunk_size: 1024
+    chunk_overlap: 256
+
+llm:
+    model: "llama3"
+
+embedding:
+    model: "all-MiniLM-L6-v2"

@@ -1,4 +1,4 @@
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 from insightvault.app.rag import RAGApp
 from insightvault.app.search import SearchApp

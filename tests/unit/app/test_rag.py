@@ -31,6 +31,7 @@ class TestRAGApp(BaseAppTestSetup):
         mock_embedding_service,
         mock_llm_service,
         mock_prompt_service,
+        mock_app_config,
     ):
         """Create a RAG app with mocked services"""
         with (
@@ -39,12 +40,14 @@ class TestRAGApp(BaseAppTestSetup):
             patch("insightvault.app.base.EmbeddingService") as mock_embedding_class,
             patch("insightvault.app.rag.OllamaLLMService") as mock_llm_class,
             patch("insightvault.app.rag.PromptService") as mock_prompt_class,
+            patch("insightvault.app.base.BaseApp._get_config") as mock_get_config,
         ):
             mock_db_class.return_value = mock_db_service
             mock_splitter_class.return_value = mock_splitter_service
             mock_embedding_class.return_value = mock_embedding_service
             mock_llm_class.return_value = mock_llm_service
             mock_prompt_class.return_value = mock_prompt_service
+            mock_get_config.return_value = mock_app_config
 
             app = RAGApp()
             return app

@@ -4,9 +4,10 @@ import pytest
 
 from insightvault.app.base import BaseApp
 from insightvault.models.document import Document
+from tests.unit import BaseTest
 
 
-class BaseAppTestSetup:
+class BaseAppTestSetup(BaseTest):
     @pytest.fixture
     def mock_embedding_service(self):
         """Create a mock embedding service"""
@@ -39,16 +40,24 @@ class BaseAppTestSetup:
         return service
 
     @pytest.fixture
-    def base_app(self, mock_db_service, mock_splitter_service, mock_embedding_service):
+    def base_app(
+        self,
+        mock_db_service,
+        mock_splitter_service,
+        mock_embedding_service,
+        mock_app_config,
+    ):
         """Create a base app with mocked services"""
         with (
             patch("insightvault.app.base.ChromaDatabaseService") as mock_db_class,
             patch("insightvault.app.base.SplitterService") as mock_splitter_class,
             patch("insightvault.app.base.EmbeddingService") as mock_embedding_class,
+            patch("insightvault.app.base.BaseApp._get_config") as mock_get_config,
         ):
             mock_db_class.return_value = mock_db_service
             mock_splitter_class.return_value = mock_splitter_service
             mock_embedding_class.return_value = mock_embedding_service
+            mock_get_config.return_value = mock_app_config
 
             app = BaseApp()
             return app
@@ -155,3 +164,35 @@ class TestBaseApp(BaseAppTestSetup):
         await base_app.async_add_documents([])
 
         base_app.db_service.add_documents.assert_called_once_with([])
+
+    def test_get_config(self, base_app):
+        """Test getting config file"""
+        config = base_app._get_config(path="./tests/mocks/mock_config.yaml")
+
+        expected_num_results = 12
+        expected_threshold = 0.82
+        expected_chunk_size = 12
+        expected_chunk_overlap = 6
+        assert config.database.path == "mock-path"
+        assert config.database.max_num_results == expected_num_results
+        assert config.database.result_threshold == expected_threshold
+        assert config.splitter.chunk_size == expected_chunk_size
+        assert config.splitter.chunk_overlap == expected_chunk_overlap
+        assert config.llm.model == "some-model"
+        assert config.embedding.model == "another-model"
+
+    def test_get_config_should_use_defaults(self, base_app):
+        """Test getting config file with incomplete config file"""
+        config = base_app._get_config(path="./tests/mocks/mock_config_incomplete.yaml")
+
+        expected_num_results = 5  # Default
+        expected_threshold = 0.9  # Default
+        expected_chunk_size = 12
+        expected_chunk_overlap = 256  # Default
+        assert config.database.path == "./data/db"
+        assert config.database.max_num_results == expected_num_results
+        assert config.database.result_threshold == expected_threshold
+        assert config.splitter.chunk_size == expected_chunk_size
+        assert config.splitter.chunk_overlap == expected_chunk_overlap
+        assert config.llm.model == "some-model"
+        assert config.embedding.model == "all-MiniLM-L6-v2"

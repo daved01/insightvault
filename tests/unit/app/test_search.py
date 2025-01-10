@@ -10,17 +10,23 @@ from tests.unit.app.test_base import BaseAppTestSetup
 class TestSearchApp(BaseAppTestSetup):
     @pytest.fixture
     def search_app(
-        self, mock_db_service, mock_splitter_service, mock_embedding_service
+        self,
+        mock_db_service,
+        mock_splitter_service,
+        mock_embedding_service,
+        mock_app_config,
     ):
         """Create a search app with mocked services"""
         with (
             patch("insightvault.app.base.ChromaDatabaseService") as mock_db_class,
             patch("insightvault.app.base.SplitterService") as mock_splitter_class,
             patch("insightvault.app.base.EmbeddingService") as mock_embedding_class,
+            patch("insightvault.app.base.BaseApp._get_config") as mock_get_config,
         ):
             mock_db_class.return_value = mock_db_service
             mock_splitter_class.return_value = mock_splitter_service
             mock_embedding_class.return_value = mock_embedding_service
+            mock_get_config.return_value = mock_app_config
 
             app = SearchApp()
             return app
